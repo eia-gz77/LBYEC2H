@@ -1,0 +1,24 @@
+# LaTeX Build Files
+*.aux
+*.bbl
+*.blg
+*.idx
+*.ilg
+*.ind
+*.lof
+*.lol
+*.lot
+*.ptc
+*.log
+*.out
+*.synctex.gz
+*.toc
+*.tmp
+*.tiw
+*.fls
+*.fdb_latexmk
+*.dvi
+
+# OS Files
+.DS_Store
+Thumbs.db

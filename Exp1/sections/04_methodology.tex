@@ -1,0 +1,114 @@
+\subsection{How does your implementation in Sec.~\ref{sec:implem} achieve the objectives?}
+By:
+\begin{enumerate}
+\item Up to two lines per item.
+\item Up to two lines per item.
+\end{enumerate}
+	
+\subsection{Why does your implementation in Sec.~\ref{sec:implem} achieve the objectives?}
+Because:
+\begin{enumerate}
+\item Up to two lines per item.
+\item Up to two lines per item.
+\end{enumerate}
+	
+\subsection{How does your evaluation in Sec.~\ref{sec:eval} achieve the objectives?}
+By:
+\begin{enumerate}
+\item Up to two lines per item.
+\item Up to two lines per item.
+\end{enumerate}
+	
+\subsection{Why does your evaluation in Sec.~\ref{sec:eval}  achieve the objectives?}
+Because:
+\begin{enumerate}
+\item Up to two lines per item.
+\item Up to two lines per item.
+\end{enumerate}
+
+\subsection{Implementation}
+\label{sec:implem}
+
+Rule of thumb: Implementation is how you made your work;
+(keywords: implemented, created, made, soldered, programmed, etc.).
+
+
+\subsubsection{What were the materials used?}
+If the presentation would be better and necessary, tabulate your answers here instead of enumeration.
+\begin{enumerate}
+\item Up to two lines per item.
+\item Up to two lines per item.
+\end{enumerate}
+
+
+\subsubsection{What is the summary of the processes used to make the coursework?}
+If you wrote a program or made a simulation, you must add statements on how the program or simulation functions in this section.
+A pseudocode as shown in Table~\ref{tab:calcxn} is a good example.
+\begin{enumerate}
+\item Up to two lines per item.
+\item Up to two lines per item.
+\end{enumerate}
+
+\begin{table}[!b]
+	\caption{Pseudocode for the calculation of $y = x^n$}
+	\label{tab:calcxn}	
+	\centering
+	{\footnotesize
+	\begin{tabular}{lll}
+	\hline
+	\hline
+	{\bfseries Input(s):} & & \\
+	$n$ & : & $n$th power;
+$n \in \mathbb{Z}^{+}$ \\
+	$x$ & : & base value; $x \in \mathbb{R}^{+}$ \\
+	\hline
+	{\bfseries Output(s):} & & \\
+	$y$ & : & result;
+$y \in \mathbb{R}^{+}$  \\
+	\hline
+	\hline
+	\\
+	\end{tabular}
+	}
+	\begin{algorithmic}[1]
+	{\footnotesize
+		\REQUIRE $n \geq 0 \vee x \neq 0$
+		\ENSURE $y = x^n$
+		\STATE $y \Leftarrow 1$
+		\IF{$n < 0$}
+				\STATE $X \Leftarrow 1 / x$
+				\STATE $N \Leftarrow -n$
+		\ELSE
+				\STATE $X \Leftarrow x$
+				\STATE $N \Leftarrow n$
+		\ENDIF
+		\WHILE{$N \neq 0$}
+				\IF{$N$ is even}
+						\STATE $X \Leftarrow X \times X$
+						\STATE $N \Leftarrow N / 2$
+				\ELSE[$N$ is odd]
+						\STATE $y \Leftarrow y \times X$
+						\STATE $N \Leftarrow N - 1$
+				\ENDIF
+		\ENDWHILE
+	}
+	\end{algorithmic}
+\end{table}
+
+\subsection{Evaluation}
+\label{sec:eval}
+
+Rule of thumb: Evaluation is how you tested your work for correctness;
+(keywords: measured, tested, compared, simulated, etc.).
+
+\subsubsection{What were your procedures for evaluating the correct outcome of your coursework?}
+\begin{enumerate}
+\item Up to two lines per item.
+\item Up to two lines per item.
+\end{enumerate}
+	
+\subsubsection{What quantities were gathered and how have you obtained them for testing the veracity of your results?}
+\begin{enumerate}
+\item Up to two lines per item.
+\item Up to two lines per item.
+\end{enumerate}

@@ -1,0 +1,86 @@
+% main.tex
+% This file manages the structure. Your group edits the files in /sections/
+
+\input{preamble.ltx}
+\hyphenation{op-tical net-works semi-conduc-tor}
+
+\begin{document}
+
+% --- TITLE & AUTHORS ---
+% Keep this in main.tex so signatures don't break
+\title{Discrete-Time Signals}
+
+\author{
+    {\small
+    \begin{tabular}{l l l}
+    & \multicolumn{2}{c}{\tiny \textcolor[rgb]{0.9,0.9,0.9}{Participated in \& did the coursework [Y/N]?}} \\ 
+        DELA~CRUZ,~Juan~A.~(10312345) & Y & \includegraphics[height=5ex]{JAD_signature} \\ 
+        FRANCO,~Nat~B.~(10354321)     & Y & \includegraphics[height=5ex]{NBF_signature} \\ 
+        RIANZARES,~Max~C.~(10314325)  & N & \includegraphics[height=5ex]{MCR_signature} \\ 
+    \end{tabular}
+    }
+    \thanks{\CrmD\protect\\} 
+    \thanks{Coursework Starting Date: \hspace{1ex} Apr. 19, 2005}
+    \thanks{Submission Date: \hspace{1ex} Apr. 26, 2005}
+}
+
+\markboth{\makebox[\columnwidth]{Coursework \# 01 \hfill}\hspace{\columnsep}\makebox[\columnwidth]{\hfill}}{} 
+\IEEEpubid{\makebox[\columnwidth]{COURSE CODE - SECTION \hfill DLSU}\hspace{\columnsep}\makebox[\columnwidth]{ \hfill {\tiny\textcolor[rgb]{0.4,0.4,0.4}{\prsDy}}}}
+
+\maketitle 
+
+% --- IMPORT SECTIONS ---
+% Group members work on these files simultaneously
+
+\section{Abstract}
+\input{sections/01_abstract}
+
+\section{Conspectus}
+\label{sec:cnspcts}
+\IEEEpubidadjcol
+\input{sections/02_conspectus}
+
+\section{Principles}
+\label{sec:concps}
+\input{sections/03_principles}
+
+\section{Methodology}
+\label{sec:meth}
+\input{sections/04_methodology}
+
+\section{Results and Discussions}
+\label{sec:results}
+\input{sections/05_results}
+
+\section{Conclusions}
+\label{sec:conc}
+\input{sections/06_conclusions}
+
+\section{CRediT Author Statement}
+% You can edit this directly here or make a file for it
+On what contributions to specify, see the terms at \url{www.elsevier.com}.
+\begin{enumerate}
+    \item DELA CRUZ, Juan A.: Conceptualization, Methodology.
+    \item FRANCO, Nat B.: Data curation, Writing.
+    \item RIANZARES, Max C.: Visualization.
+\end{enumerate}
+
+% --- REFERENCES ---
+\bibliographystyle{IEEEtran}
+\bibliography{references} 
+
+% --- QUESTIONS ---
+\section{Answers to Questions}
+\label{sec:ans2ques}
+\input{sections/07_answers}
+
+% --- APPENDICES ---
+\newpage
+\cleardoublepage
+\appendices
+
+% I put the template instructions in a separate file. 
+% When you are done reading them, comment out the line below with a %
+\input{sections/99_instructions} 
+
+\end{document}
