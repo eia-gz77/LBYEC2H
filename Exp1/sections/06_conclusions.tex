@@ -1,13 +1,17 @@
 \subsection{What are the main points that should be known, remembered, and learned about the coursework?}
 \begin{enumerate}
-\item Up to two lines per item.
-\item Up to two lines per item.
+\item Linear algebra provides a systematic method for solving complex circuit problems by converting Mesh Analysis equations into the matrix form $A\cdot i = c$.
+[span_0](start_span)\item All implemented calculation methods (Cramer's Rule, Matrix Inverse, and MATLAB's \texttt{solve}) yielded identical results, confirming that the choice of mathematical approach does not alter the physical solution of the circuit[span_0](end_span).
 \end{enumerate}
 
 \subsection{What are the gists of the inferences drawn from your results?}
-
-\subsection{Briefly, what are your comments on (1)~your results, and  (2)~future coursework if any?}
 \begin{enumerate}
-\item Up to two lines per item.
-\item Up to two lines per item.
+[span_1](start_span)\item The calculated mesh currents ($i_1=0.0556$ A, $i_2=0.0338$ A, $i_3=0.0717$ A, $i_4=0.1009$ A) confirm that the system is consistent and the circuit has a unique solution[span_1](end_span).
+[span_2](start_span)\item The successful extraction of eigenvalues ($\lambda \approx 141.78, 115.27, -66.49, -146.56$) infers that the Symbolic Math Toolbox is effective for analyzing the spectral properties of circuit matrices, which is essential for understanding system stability in advanced applications[span_2](end_span).
+\end{enumerate}
+
+\subsection{Briefly, what are your comments on (1) your results, and (2) future coursework if any?}
+\begin{enumerate}
+[span_3](start_span)\item The results are highly accurate with negligible discrepancies, as the manual symbolic derivation perfectly matched the numerical functions of MATLAB[span_3](end_span).
+\item For future coursework, these linear algebra techniques should be applied to AC circuits with complex impedances to test the robustness of the matrix methods against complex numbers.
 \end{enumerate}
