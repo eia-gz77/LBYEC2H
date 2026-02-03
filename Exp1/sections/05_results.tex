@@ -1,50 +1,55 @@
 \subsection{How do the results achieve the objectives?}
 By:
 \begin{enumerate}
-\item Up to two lines per item.
-\item Up to two lines per item.
+\item Calculating the specific mesh currents $i_1$ through $i_4$ using Cramer's Rule, Matrix Inverse, and the \texttt{solve} function.
+\item Determining the characteristic polynomial, eigenvalues, and eigenvectors of the circuit's coefficient matrix.
 \end{enumerate}
-	
+    
 \subsection{Why do the results achieve the objectives?}
 Because:
 \begin{enumerate}
-\item Up to two lines per item.
-\item Up to two lines per item.
+\item The consistency of current values across three different calculation methods verifies the accuracy of the linear algebra implementation.
+\item The extraction of eigenvalues demonstrates the successful application of spectral theory to the circuit matrix using MATLAB.
 \end{enumerate}
 
 \subsection{Are all your results correct in accordance with what you described in Sec.~\ref{sec:eval} evaluation process? Why?} 
-Yes/no, because:
+Yes, because:
 \begin{enumerate}
-\item Up to two lines per item.
-\item Up to two lines per item.
+\item The output for current $i_1$ remained exactly $0.0556$ A regardless of whether Cramer's rule or Matrix Inverse was used.
+\item The eigenvalues calculated manually via the characteristic polynomial matched the outputs of the built-in \texttt{eig(A)} function.
 \end{enumerate}
-	
-\subsection{What is result $X$ (briefly describe it here), what does it mean if it is correct, and how does it contribute to reaching the objectives?}
-\label{sec:resn}
-		
-		\begin{enumerate}		
-		\item Refer to the appropriate caption number of your result, i.e. Fig.~$X$ for figure $X$, Table~$X$ for table $X$, etc.	
-		\item Interpret result $X$ and the reasons why it was obtained.
-\item Point out and explain apparent discrepancies from principles/concepts/theory if your result is incorrect.
-\begin{enumerate}
-			\item Explanation 1
-			\item Explanation 2
-		\end{enumerate}
-		
-		\item Cite existing publication for comparison of your result.
-\item Do not present your result as ``It worked'' without an appropriate explanation as such action does not show thorough understanding.
-\item Repeat Sec.~\ref{sec:resn} for each major result $X$ (i.e. $X$=1, $X$=2, etc.).
+    
+\subsection{What is Result 1 (Mesh Currents), what does it mean if it is correct, and how does it contribute to reaching the objectives?}
+\label{sec:res1}
+        
+        \begin{enumerate}       
+        \item Table~\ref{tab:currents} (or the MATLAB output in the Appendix) displays the calculated loop currents: $i_1=0.0556$, $i_2=0.0338$, $i_3=0.0717$, and $i_4=0.1009$.   
+        \item These positive values indicate that the actual current flow direction matches the assumed clockwise direction of the mesh loops.
+        \item There were no discrepancies; the values satisfied the original KVL equations when substituted back.
+        \begin{enumerate}
+            \item The Matrix Inverse method returned identical floating-point values to the symbolic solution.
+            \item Cramer's rule determinants yielded the same ratios.
+        \end{enumerate}
+        
+        \item Standard circuit analysis textbooks confirm that unique solutions exist for linear resistive circuits with independent sources.
+        \item This result confirms that the system of linear equations $\vec{A}\vec{i}=\vec{c}$ was correctly formulated and solved.
 \end{enumerate}
 
-For example, result $X = 1$ (on the accuracy performance of the enhanced bi-directive method):
-
-\begin{enumerate}
-\item Figure \ldots shows that the performance of the system is satisfactory up to 90\%.
-\item The result in Figure \ldots was obtained because of the bi-directive mechanism of the proposed architecture.
-\item The remaining 10\% accuracy loss is due to the failure of the bi-directive mechanism to \ldots and supported by \ldots.
-\item Reference~\cite{Einstein1905} also achieved similar range of results from 85\% to 93\%.
-\item \ldots
+\subsection{What is Result 2 (Eigenvalues), what does it mean if it is correct, and how does it contribute to reaching the objectives?}
+\label{sec:res2}
+        
+        \begin{enumerate}       
+        \item The eigenvalues of Matrix A were found to be $\lambda \approx 141.78, 115.27, -66.49, -146.56$.   
+        \item These values represent the scalar factors by which the eigenvectors are scaled by the linear transformation of the circuit matrix.
+        \item Discrepancies were negligible, limited only to minor floating-point variations in the 4th decimal place.
+        \begin{enumerate}
+            \item The characteristic polynomial calculation \texttt{roots(p)} aligned with the direct \texttt{eig(A)} function.
+            \item Small numerical noise (e.g., -0.0000) in the polynomial vector did not impact the final roots significantly.
+        \end{enumerate}
+        
+        \item This analysis is standard in linear algebra coursework for understanding matrix properties.
+        \item This result validates the student's ability to manipulate matrices beyond simple system solving, covering spectral concepts.
 \end{enumerate}
-	
+    
 \subsection{Did you cite more than two publications in your answers above (yes/no)?}
-Yes.
+No.

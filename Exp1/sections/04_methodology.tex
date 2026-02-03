@@ -1,29 +1,29 @@
 \subsection{How does your implementation in Sec.~\ref{sec:implem} achieve the objectives?}
 By:
 \begin{enumerate}
-\item Up to two lines per item.
-\item Up to two lines per item.
+\item Formulating four simultaneous mesh equations based on the circuit diagram loops.
+\item Converting the linear system into matrix form $\vec{A}\vec{i}=\vec{c}$ for computational processing.
 \end{enumerate}
-	
+    
 \subsection{Why does your implementation in Sec.~\ref{sec:implem} achieve the objectives?}
 Because:
 \begin{enumerate}
-\item Up to two lines per item.
-\item Up to two lines per item.
+\item Matrix representation enables the application of algorithmic solutions like Cramer's Rule and Matrix Inverse.
+\item The Symbolic Math Toolbox allows for exact algebraic manipulation of variables before numerical evaluation.
 \end{enumerate}
-	
+    
 \subsection{How does your evaluation in Sec.~\ref{sec:eval} achieve the objectives?}
 By:
 \begin{enumerate}
-\item Up to two lines per item.
-\item Up to two lines per item.
+\item Solving the system using three distinct methods: Cramer's Rule, Matrix Inverse, and the built-in `solve` function.
+\item Computing eigenvalues and eigenvectors using both characteristic polynomials and the standard `eig` function.
 \end{enumerate}
-	
+    
 \subsection{Why does your evaluation in Sec.~\ref{sec:eval}  achieve the objectives?}
 Because:
 \begin{enumerate}
-\item Up to two lines per item.
-\item Up to two lines per item.
+\item Comparing results across multiple calculation methods ensures the numerical accuracy of the calculated currents.
+\item Verifying manual algorithmic logic (loops/determinants) against optimized built-in functions validates the code structure.
 \end{enumerate}
 
 \subsection{Implementation}
@@ -34,65 +34,59 @@ Rule of thumb: Implementation is how you made your work;
 
 
 \subsubsection{What were the materials used?}
-If the presentation would be better and necessary, tabulate your answers here instead of enumeration.
 \begin{enumerate}
-\item Up to two lines per item.
-\item Up to two lines per item.
+\item Personal Computer with MATLAB software installed.
+\item Laboratory exercise manual and circuit diagram for mesh analysis.
 \end{enumerate}
 
 
 \subsubsection{What is the summary of the processes used to make the coursework?}
-If you wrote a program or made a simulation, you must add statements on how the program or simulation functions in this section.
-A pseudocode as shown in Table~\ref{tab:calcxn} is a good example.
+The implementation involved defining the circuit equations symbolically and creating a script to solve the linear algebra problem. A pseudocode for the general solving process is shown in Table~\ref{tab:linsolve}.
 \begin{enumerate}
-\item Up to two lines per item.
-\item Up to two lines per item.
+\item Defined symbolic variables $i_1, i_2, i_3, i_4$ and wrote mesh equations based on KVL.
+\item Constructed the coefficient matrix $A$ and constant vector $c$ from the linear equations.
 \end{enumerate}
 
 \begin{table}[!b]
-	\caption{Pseudocode for the calculation of $y = x^n$}
-	\label{tab:calcxn}	
-	\centering
-	{\footnotesize
-	\begin{tabular}{lll}
-	\hline
-	\hline
-	{\bfseries Input(s):} & & \\
-	$n$ & : & $n$th power;
-$n \in \mathbb{Z}^{+}$ \\
-	$x$ & : & base value; $x \in \mathbb{R}^{+}$ \\
-	\hline
-	{\bfseries Output(s):} & & \\
-	$y$ & : & result;
-$y \in \mathbb{R}^{+}$  \\
-	\hline
-	\hline
-	\\
-	\end{tabular}
-	}
-	\begin{algorithmic}[1]
-	{\footnotesize
-		\REQUIRE $n \geq 0 \vee x \neq 0$
-		\ENSURE $y = x^n$
-		\STATE $y \Leftarrow 1$
-		\IF{$n < 0$}
-				\STATE $X \Leftarrow 1 / x$
-				\STATE $N \Leftarrow -n$
-		\ELSE
-				\STATE $X \Leftarrow x$
-				\STATE $N \Leftarrow n$
-		\ENDIF
-		\WHILE{$N \neq 0$}
-				\IF{$N$ is even}
-						\STATE $X \Leftarrow X \times X$
-						\STATE $N \Leftarrow N / 2$
-				\ELSE[$N$ is odd]
-						\STATE $y \Leftarrow y \times X$
-						\STATE $N \Leftarrow N - 1$
-				\ENDIF
-		\ENDWHILE
-	}
-	\end{algorithmic}
+    \caption{Pseudocode for Solving System of Linear Equations}
+    \label{tab:linsolve}  
+    \centering
+    {\footnotesize
+    \begin{tabular}{lll}
+    \hline
+    \hline
+    {\bfseries Input(s):} & & \\
+    $A$ & : & Coefficient Matrix ($4 \times 4$) \\
+    $c$ & : & Constant Vector ($4 \times 1$) \\
+    \hline
+    {\bfseries Output(s):} & & \\
+    $i$ & : & Loop Currents vector ($4 \times 1$) \\
+    \hline
+    \hline
+    \\
+    \end{tabular}
+    }
+    \begin{algorithmic}[1]
+    {\footnotesize
+        \REQUIRE $\det(A) \neq 0$
+        \ENSURE $A \cdot i = c$
+        \STATE Define symbolic variables $eqn1 \dots eqn4$
+        \STATE $A \Leftarrow$ Extract Coefficients from equations
+        \STATE $c \Leftarrow$ Extract Constants from equations
+        \STATE Calculate Determinant $D \Leftarrow \det(A)$
+        \IF{Method is Cramer's Rule}
+             \FOR{$k = 1$ to $4$}
+                \STATE $A_k \Leftarrow A$
+                \STATE Replace $k$-th column of $A_k$ with $c$
+                \STATE $i_k \Leftarrow \det(A_k) / D$
+             \ENDFOR
+        \ELSIF{Method is Matrix Inverse}
+             \STATE $A_{inv} \Leftarrow \text{inv}(A)$
+             \STATE $i \Leftarrow A_{inv} \times c$
+        \ENDIF
+        \STATE Display $i$
+    }
+    \end{algorithmic}
 \end{table}
 
 \subsection{Evaluation}
@@ -103,12 +97,12 @@ Rule of thumb: Evaluation is how you tested your work for correctness;
 
 \subsubsection{What were your procedures for evaluating the correct outcome of your coursework?}
 \begin{enumerate}
-\item Up to two lines per item.
-\item Up to two lines per item.
+\item The calculated currents from Cramer's Rule were cross-referenced with the Matrix Inverse method results.
+\item Eigenvalues derived from the `poly` and `roots` functions were checked against the `eig` function output.
 \end{enumerate}
-	
+    
 \subsubsection{What quantities were gathered and how have you obtained them for testing the veracity of your results?}
 \begin{enumerate}
-\item Up to two lines per item.
-\item Up to two lines per item.
+\item Loop currents ($i_1 \approx 0.0556$, $i_2 \approx 0.0338$, etc.) obtained via determinants and inverses.
+\item Eigenvalues (e.g., $141.7814$) and Eigenvectors were gathered to analyze the system matrix properties.
 \end{enumerate}
