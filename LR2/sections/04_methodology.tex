@@ -1,108 +1,57 @@
-\subsection{How does your implementation in Sec.~\ref{sec:implem} achieve the objectives?}
-By:
-\begin{enumerate}
-\item Formulating four simultaneous mesh equations based on the circuit diagram loops.
-\item Converting the linear system into matrix form $\vec{A}\vec{i}=\vec{c}$ for computational processing.
-\end{enumerate}
-    
-\subsection{Why does your implementation in Sec.~\ref{sec:implem} achieve the objectives?}
-Because:
-\begin{enumerate}
-\item Matrix representation enables the application of algorithmic solutions like Cramer's Rule and Matrix Inverse.
-\item The Symbolic Math Toolbox allows for exact algebraic manipulation of variables before numerical evaluation.
-\end{enumerate}
-    
-\subsection{How does your evaluation in Sec.~\ref{sec:eval} achieve the objectives?}
-By:
-\begin{enumerate}
-\item Solving the system using three distinct methods: Cramer's Rule, Matrix Inverse, and the built-in `solve` function.
-\item Computing eigenvalues and eigenvectors using both characteristic polynomials and the standard `eig` function.
-\end{enumerate}
-    
-\subsection{Why does your evaluation in Sec.~\ref{sec:eval}  achieve the objectives?}
-Because:
-\begin{enumerate}
-\item Comparing results across multiple calculation methods ensures the numerical accuracy of the calculated currents.
-\item Verifying manual algorithmic logic (loops/determinants) against optimized built-in functions validates the code structure.
-\end{enumerate}
+The experimental design is structured to systematically investigate the properties of continuous-time signals through mathematical modeling and computational simulation. By leveraging MATLAB’s Symbolic Math Toolbox, this methodology demonstrates how theoretical signal operations can be implemented and validated within a software environment. [cite: 5, 277, 511]
 
-\subsection{Implementation}
-\label{sec:implem}
+\subsection{Signal Construction and Transformation Methodology}
+The core of this experiment involves the symbolic definition of a baseline signal, $x(t)$, which serves as the primary subject for various time-domain operations. [cite: 9, 281, 515] The signal is constructed using Heaviside step functions to isolate its behavior within the specific interval of $t = 0$ to $t = 8$ seconds. The exact symbolic math expression designed for this experiment is: [cite: 29, 298, 535]
 
-Rule of thumb: Implementation is how you made your work;
-(keywords: implemented, created, made, soldered, programmed, etc.).
+\begin{equation}
+x(t) = (1 - 0.25t) \cdot (\text{heaviside}(t) - \text{heaviside}(t - 8))
+\end{equation}
 
+The experimental procedure for signal transformation required the modification of the independent variable $t$ to achieve specific outcomes: [cite: 32, 300, 541]
+\begin{itemize}
+    \item \textbf{Time Shifting}: Replacing $t$ with $(t - 2)$ for a delay and $(t + 4)$ for an advance. [cite: 39, 45, 308, 314, 553, 560]
+    \item \textbf{Time Reversal}: Substituting $t$ with $(-t)$. [cite: 50, 321, 569]
+    \item \textbf{Combined Operations}: Implementing $x(3-t)$ to achieve both flipping and shifting. [cite: 54, 327, 577]
+    \item \textbf{Time Scaling}: Multiplying $t$ by a constant factor of 2 ($x(2t)$) to achieve compression. [cite: 60, 333, 584]
+\end{itemize}
 
-\subsubsection{What were the materials used?}
-\begin{enumerate}
-\item Personal Computer with MATLAB software installed.
-\item Laboratory exercise manual and circuit diagram for mesh analysis.
-\end{enumerate}
+These transformations were consolidated into a single figure using a $3 \times 2$ subplot configuration to allow for simultaneous comparative analysis of the six resulting waveforms. [cite: 32, 300, 542]
 
+\subsection{Impulse Response Modeling for Filter Systems}
+The methodology also addressed the representation of system characteristics through the definition of impulse response functions ($h(t)$). [cite: 141, 417, 647] Four distinct filter types were modeled using combinations of the Dirac delta function ($\delta(t)$) and the Heaviside step function ($u(t)$) to simulate ideal signal processing behavior. [cite: 147, 157, 424, 430, 656, 664] The specific equations implemented for these models are summarized in Table 1. [cite: 143, 149, 153, 157, 421, 424, 427, 430, 650, 656, 660, 664]
 
-\subsubsection{What is the summary of the processes used to make the coursework?}
-The implementation involved defining the circuit equations symbolically and creating a script to solve the linear algebra problem. A pseudocode for the general solving process is shown in Table~\ref{tab:linsolve}.
-\begin{enumerate}
-\item Defined symbolic variables $i_1, i_2, i_3, i_4$ and wrote mesh equations based on KVL.
-\item Constructed the coefficient matrix $A$ and constant vector $c$ from the linear equations.
-\end{enumerate}
-
-\begin{table}[!b]
-    \caption{Pseudocode for Solving System of Linear Equations}
-    \label{tab:linsolve}  
-    \centering
-    {\footnotesize
-    \begin{tabular}{lll}
-    \hline
-    \hline
-    {\bfseries Input(s):} & & \\
-    $A$ & : & Coefficient Matrix ($4 \times 4$) \\
-    $c$ & : & Constant Vector ($4 \times 1$) \\
-    \hline
-    {\bfseries Output(s):} & & \\
-    $i$ & : & Loop Currents vector ($4 \times 1$) \\
-    \hline
-    \hline
-    \\
-    \end{tabular}
-    }
-    \begin{algorithmic}[1]
-    {\footnotesize
-        \REQUIRE $\det(A) \neq 0$
-        \ENSURE $A \cdot i = c$
-        \STATE Define symbolic variables $eqn1 \dots eqn4$
-        \STATE $A \Leftarrow$ Extract Coefficients from equations
-        \STATE $c \Leftarrow$ Extract Constants from equations
-        \STATE Calculate Determinant $D \Leftarrow \det(A)$
-        \IF{Method is Cramer's Rule}
-             \FOR{$k = 1$ to $4$}
-                \STATE $A_k \Leftarrow A$
-                \STATE Replace $k$-th column of $A_k$ with $c$
-                \STATE $i_k \Leftarrow \det(A_k) / D$
-             \ENDFOR
-        \ELSIF{Method is Matrix Inverse}
-             \STATE $A_{inv} \Leftarrow \text{inv}(A)$
-             \STATE $i \Leftarrow A_{inv} \times c$
-        \ENDIF
-        \STATE Display $i$
-    }
-    \end{algorithmic}
+\begin{table}[h]
+\centering
+\caption{Mathematical Expressions for Filter Impulse Responses}
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Filter Type} & \textbf{Symbolic Equation} & \textbf{MATLAB Implementation} \\ \hline
+Lowpass & $h_1(t) = e^{-10t}u(t)$ & \texttt{exp(-10*t) * heaviside(t)} \\ \hline
+Highpass & $h_2(t) = \delta(t) - e^{-10t}u(t)$ & \texttt{dirac(t) - exp(-10*t) * heaviside(t)} \\ \hline
+Bandpass & $h_3(t) = e^{-10t}\cos(500t)u(t)$ & \texttt{exp(-10*t)*cos(500*t)*heaviside(t)} \\ \hline
+Bandstop & $h_4(t) = \delta(t) - e^{-10t}\cos(500t)u(t)$ & \texttt{dirac(t) - exp(-10*t)*cos(500*t)*heaviside(t)} \\ \hline
+\end{tabular}
 \end{table}
 
-\subsection{Evaluation}
-\label{sec:eval}
+\subsection{Numerical Computation and Statistical Correlation}
+To determine the auto-correlation of the signal $x(t)$, the methodology required a transition from symbolic expressions to numerical data arrays. [cite: 193, 469, 694] This was achieved by defining a discrete time vector ranging from -10 to 10 seconds with a high-resolution step size of $dt = 0.01$. [cite: 194, 197, 470, 471, 696, 697] The symbolic expression $x(t)$ was evaluated over this vector to create the numerical array \texttt{x\_num}. [cite: 202, 472, 698] The auto-correlation was computed using the \texttt{xcorr} function, and the resulting sequence was normalized by multiplying by the time step $dt$. [cite: 218, 233, 473, 474, 699, 700]
 
-Rule of thumb: Evaluation is how you tested your work for correctness;
-(keywords: measured, tested, compared, simulated, etc.).
+\subsection{Experimental Pseudocode}
+The following logic describes the programmatic implementation of the experiment: [cite: 32, 160, 193, 300, 432, 469, 542, 667, 694]
 
-\subsubsection{What were your procedures for evaluating the correct outcome of your coursework?}
-\begin{enumerate}
-\item The calculated currents from Cramer's Rule were cross-referenced with the Matrix Inverse method results.
-\item Eigenvalues derived from the `poly` and `roots` functions were checked against the `eig` function output.
-\end{enumerate}
-    
-\subsubsection{What quantities were gathered and how have you obtained them for testing the veracity of your results?}
-\begin{enumerate}
-\item Loop currents ($i_1 \approx 0.0556$, $i_2 \approx 0.0338$, etc.) obtained via determinants and inverses.
-\item Eigenvalues (e.g., $141.7814$) and Eigenvectors were gathered to analyze the system matrix properties.
-\end{enumerate}
+\begin{verbatim}
+1. START
+2. DEFINE symbolic variable 't'
+3. CONSTRUCT signal x(t) using Heaviside functions for interval [0, 8]
+4. FOR EACH transformation (shift, flip, scale):
+     APPLY transformation to t
+     PLOT result in 3x2 subplot grid (Figure 1)
+5. CONSTRUCT signal y(t) = exp(-t)u(t) + u(-1-t)
+6. PLOT y(t) for t in range [-6, 6] (Figure 2)
+7. DEFINE h1(t) through h4(t) for LPF, HPF, BPF, and BSF
+8. OVERLAY h1(t) and h2(t) (excluding delta) on same axis (Figure 3)
+9. CONVERT symbolic x(t) to numeric array x_num with dt = 0.01
+10. COMPUTE Rxx = xcorr(x_num, x_num) * dt
+11. PLOT Rxx vs tau (Figure 4)
+12. END
+\end{verbatim}
