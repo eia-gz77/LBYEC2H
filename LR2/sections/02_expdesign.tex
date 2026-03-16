@@ -22,15 +22,15 @@ The experiment also addressed the representation of system characteristics throu
 
 \begin{table}[h]
 \centering
-\caption{Table 1: Mathematical Expressions for Filter Impulse Responses}
-\begin{tabular}{|l|l|l|}
+\caption{Mathematical Expressions for Filter Impulse Responses}
+\begin{tabularx}{\columnwidth}{|l|X|X|} % X forces the column to wrap
 \hline
 \textbf{Filter Type} & \textbf{Symbolic Equation} & \textbf{MATLAB Implementation} \\ \hline
 Lowpass & $h_1(t) = e^{-10t}u(t)$ & \texttt{exp(-10*t) * heaviside(t)} \\ \hline
 Highpass & $h_2(t) = \delta(t) - e^{-10t}u(t)$ & \texttt{dirac(t) - exp(-10*t) * heaviside(t)} \\ \hline
 Bandpass & $h_3(t) = e^{-10t}\cos(500t)u(t)$ & \texttt{exp(-10*t)*cos(500*t)*heaviside(t)} \\ \hline
 Bandstop & $h_4(t) = \delta(t) - e^{-10t}\cos(500t)u(t)$ & \texttt{dirac(t) - exp(-10*t)*cos(500*t)*heaviside(t)} \\ \hline
-\end{tabular}
+\end{tabularx}
 \end{table}
 
 \subsection{Numerical Computation and Statistical Correlation}
