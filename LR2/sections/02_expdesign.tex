@@ -1,24 +1,24 @@
-The experimental design is structured to systematically investigate the properties of continuous-time signals through mathematical modeling and computational simulation. By leveraging MATLAB’s Symbolic Math Toolbox, this methodology demonstrates how theoretical signal operations can be implemented and validated within a software environment. [cite: 5, 277, 511]
+The experimental design is structured to systematically investigate the properties of continuous-time signals through mathematical modeling and computational simulation. By leveraging MATLAB’s Symbolic Math Toolbox, this methodology demonstrates how theoretical signal operations can be implemented and validated within a software environment.
 
 \subsection{Signal Construction and Transformation Methodology}
-The core of this experiment involves the symbolic definition of a baseline signal, $x(t)$, which serves as the primary subject for various time-domain operations. [cite: 9, 281, 515] The signal is constructed using Heaviside step functions to isolate its behavior within the specific interval of $t = 0$ to $t = 8$ seconds. The exact symbolic math expression designed for this experiment is: [cite: 29, 298, 535]
+The core of this experiment involves the symbolic definition of a baseline signal, $x(t)$, which serves as the primary subject for various time-domain operations.  The signal is constructed using Heaviside step functions to isolate its behavior within the specific interval of $t = 0$ to $t = 8$ seconds. The exact symbolic math expression designed for this experiment is:
 
 \begin{equation}
 x(t) = (1 - 0.25t) \cdot (\text{heaviside}(t) - \text{heaviside}(t - 8))
 \end{equation}
 
-The experimental procedure for signal transformation required the modification of the independent variable $t$ to achieve specific outcomes: [cite: 32, 300, 541]
+The experimental procedure for signal transformation required the modification of the independent variable $t$ to achieve specific outcomes:
 \begin{itemize}
-    \item \textbf{Time Shifting}: Replacing $t$ with $(t - 2)$ for a delay and $(t + 4)$ for an advance. [cite: 39, 45, 308, 314, 553, 560]
-    \item \textbf{Time Reversal}: Substituting $t$ with $(-t)$. [cite: 50, 321, 569]
-    \item \textbf{Combined Operations}: Implementing $x(3-t)$ to achieve both flipping and shifting. [cite: 54, 327, 577]
-    \item \textbf{Time Scaling}: Multiplying $t$ by a constant factor of 2 ($x(2t)$) to achieve compression. [cite: 60, 333, 584]
+    \item \textbf{Time Shifting}: Replacing $t$ with $(t - 2)$ for a delay and $(t + 4)$ for an advance.
+    \item \textbf{Time Reversal}: Substituting $t$ with $(-t)$.
+    \item \textbf{Combined Operations}: Implementing $x(3-t)$ to achieve both flipping and shifting.
+    \item \textbf{Time Scaling}: Multiplying $t$ by a constant factor of 2 ($x(2t)$) to achieve compression.
 \end{itemize}
 
-These transformations were consolidated into a single figure using a $3 \times 2$ subplot configuration to allow for simultaneous comparative analysis of the six resulting waveforms. [cite: 32, 300, 542]
+These transformations were consolidated into a single figure using a $3 \times 2$ subplot configuration to allow for simultaneous comparative analysis of the six resulting waveforms.
 
 \subsection{Impulse Response Modeling for Filter Systems}
-The methodology also addressed the representation of system characteristics through the definition of impulse response functions ($h(t)$). [cite: 141, 417, 647] Four distinct filter types were modeled using combinations of the Dirac delta function ($\delta(t)$) and the Heaviside step function ($u(t)$) to simulate ideal signal processing behavior. [cite: 147, 157, 424, 430, 656, 664] The specific equations implemented for these models are summarized in Table 1. [cite: 143, 149, 153, 157, 421, 424, 427, 430, 650, 656, 660, 664]
+The methodology also addressed the representation of system characteristics through the definition of impulse response functions ($h(t)$). Four distinct filter types were modeled using combinations of the Dirac delta function ($\delta(t)$) and the Heaviside step function ($u(t)$) to simulate ideal signal processing behavior. The specific equations implemented for these models are summarized in Table 1.
 
 \begin{table}[h]
 \centering
