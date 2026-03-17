@@ -20,17 +20,19 @@ These transformations were consolidated into a single figure using a $3 \times 2
 \subsection{Impulse Response Modeling for Filter Systems}
 The experiment also addressed the representation of system characteristics through the definition of impulse response functions ($h(t)$). Four distinct filter types were modeled using combinations of the Dirac delta function ($\delta(t)$) and the Heaviside step function ($u(t)$) to simulate ideal signal processing behavior. The specific equations implemented for these models are summarized in Table 1.
 
-\begin{table}[h]
+\begin{table}[htbp]
 \centering
 \caption{Mathematical Expressions for Filter Impulse Responses}
-\begin{tabularx}{\columnwidth}{|l|X|X|} % X forces the column to wrap
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{|l|l|l|}
 \hline
 \textbf{Filter Type} & \textbf{Symbolic Equation} & \textbf{MATLAB Implementation} \\ \hline
 Lowpass & $h_1(t) = e^{-10t}u(t)$ & \texttt{exp(-10*t) * heaviside(t)} \\ \hline
 Highpass & $h_2(t) = \delta(t) - e^{-10t}u(t)$ & \texttt{dirac(t) - exp(-10*t) * heaviside(t)} \\ \hline
 Bandpass & $h_3(t) = e^{-10t}\cos(500t)u(t)$ & \texttt{exp(-10*t)*cos(500*t)*heaviside(t)} \\ \hline
 Bandstop & $h_4(t) = \delta(t) - e^{-10t}\cos(500t)u(t)$ & \texttt{dirac(t) - exp(-10*t)*cos(500*t)*heaviside(t)} \\ \hline
-\end{tabularx}
+\end{tabular}%
+}
 \end{table}
 
 \subsection{Numerical Computation and Statistical Correlation}
@@ -39,19 +41,21 @@ To determine the auto-correlation of the signal $x(t)$, the experiment required 
 \subsection{Experimental Pseudocode}
 The following logic describes the programmatic implementation of the experiment:
 
-\begin{verbatim}
-1. START
-2. DEFINE symbolic variable 't'
-3. CONSTRUCT signal x(t) using Heaviside functions for interval [0, 8]
-4. FOR EACH transformation (shift, flip, scale):
-     APPLY transformation to t
-     PLOT result in 3x2 subplot grid (Figure 1)
-5. CONSTRUCT signal y(t) = exp(-t)u(t) + u(-1-t)
-6. PLOT y(t) for t in range [-6, 6] (Figure 2)
-7. DEFINE h1(t) through h4(t) for LPF, HPF, BPF, and BSF
-8. OVERLAY h1(t) and h2(t) (excluding delta) on same axis (Figure 3)
-9. CONVERT symbolic x(t) to numeric array x_num with dt = 0.01
-10. COMPUTE Rxx = xcorr(x_num, x_num) * dt
-11. PLOT Rxx vs tau (Figure 4)
-12. END
-\end{verbatim}
+\begin{enumerate}
+    \item START
+    \item DEFINE symbolic variable `t'
+    \item CONSTRUCT signal x(t) using Heaviside functions for interval [0, 8]
+    \item FOR EACH transformation (shift, flip, scale):
+    \begin{itemize}
+        \item APPLY transformation to t
+        \item PLOT result in 3x2 subplot grid (Figure 1)
+    \end{itemize}
+    \item CONSTRUCT signal y(t) = exp(-t)u(t) + u(-1-t)
+    \item PLOT y(t) for t in range [-6, 6] (Figure 2)
+    \item DEFINE h1(t) through h4(t) for LPF, HPF, BPF, and BSF
+    \item OVERLAY h1(t) and h2(t) (excluding delta) on same axis (Figure 3)
+    \item CONVERT symbolic x(t) to numeric array x\_num with dt = 0.01
+    \item COMPUTE Rxx = xcorr(x\_num, x\_num) * dt
+    \item PLOT Rxx vs tau (Figure 4)
+    \item END
+\end{enumerate}
