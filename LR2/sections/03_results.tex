@@ -4,7 +4,6 @@ The results obtained from the lab activity provide a comprehensive look at the m
 The first phase of the analysis focused on the manipulation of the baseline signal $x(t)$, which is a linear ramp function defined within the interval $t \in [0, 8]$. As observed in the consolidated results, the original signal transitions from an amplitude of 1 at $t=0$ to an amplitude of -1 at $t=8$. The transformation $x(t-2)$ demonstrated a successful time delay, where the entire waveform shifted two units to the right without altering its shape or amplitude. Conversely, $x(t+4)$ showed a time advance, moving the signal four units to the left into the negative time domain. The time-reversal operation $x(-t)$ resulted in a vertical reflection across the y-axis, effectively flipping the ramp’s orientation. The combined operation $x(3-t)$ proved to be the most complex, as it required both a reversal and a 3-second shift, resulting in a signal that peaks at $t=3$. Finally, the time-scaling operation $x(2t)$ compressed the original 8-second duration into a 4-second window, confirming that a scaling factor greater than unity increases the "speed" of the signal relative to the time axis.
 
 \begin{figure}[h]
-<<<<<<< HEAD
 \centering
 \includegraphics[width=\columnwidth]{figure1.jpeg}
 \caption{Subplots of Signal Transformations illustrating shifting, reversal, and scaling.}
@@ -12,7 +11,6 @@ The first phase of the analysis focused on the manipulation of the baseline sign
     \centering
     \includegraphics[width=\columnwidth]{figure1.jpeg}
     \caption{Subplots of Signal Transformations illustrating shifting, reversal, and scaling.}
->>>>>>> 3188476cf188377de2b655841accb172854b083f
 \end{figure}
 
 \subsection{Piecewise Evaluation of Composite Signal $y(t)$}
@@ -43,12 +41,9 @@ The auto-correlation plot provides a statistical measure of how much the signal 
 \end{figure}
 
 \subsection{Numerical Results and Dataset Characteristics}
-<<<<<<< HEAD
-To ensure the accuracy of the simulations, specific numerical parameters were maintained across all group members' experiments. The transition from symbolic expressions to numerical data utilized a sampling interval of $dt = 0.01$ seconds, which equates to a sampling frequency of 100 Hz. This resolution was sufficient to capture the rapid transitions in the filter impulse responses and the slope of the ramp function without significant aliasing. The numerical array \texttt{x\_num} was generated over a 20-second window, resulting in a vector of 2001 data points. Consequently, the auto-correlation result \texttt{Rxx} produced a vector of 4001 points, adhering to the standard signal processing rule where the length of a correlation or convolution is $2N-1$. The final amplitude of the auto-correlation peak (~2.7) was achieved by multiplying the raw \texttt{xcorr} output by the time step $dt$, which correctly approximates the continuous-time integral of the signal's square.
-=======
+
 To ensure the accuracy of the simulations, specific n   umerical parameters were maintained across all group members' experiments. The transition from symbolic expressions to numerical data utilized a sampling interval of $dt = 0.01$ seconds, which equates to a sampling frequency of 100 Hz. This resolution was sufficient to capture the rapid transitions in the filter impulse responses and the slope of the ramp function without significant aliasing. The numerical array \texttt{x\_num} was generated over a 20-second window, resulting in a vector of 2001 data points. Consequently, the auto-correlation result \texttt{Rxx} produced a vector of 4001 points, adhering to the standard signal processing rule where the length of a correlation or convolution is $2N-1$. The final amplitude of the auto-correlation peak (~2.7) was achieved by multiplying the raw \texttt{xcorr} output by the time step $dt$, which correctly approximates the continuous-time integral of the signal's square.
 
->>>>>>> 3188476cf188377de2b655841accb172854b083f
 \begin{table}[h]
 \centering
 \caption{Consolidated Numerical Parameters and Simulation Results}
