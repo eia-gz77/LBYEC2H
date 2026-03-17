@@ -5,7 +5,7 @@ The first phase of the analysis focused on the manipulation of the baseline sign
 
 \begin{figure}[h]
     \centering
-    \fbox{Placeholder: [Figure 1. Signal Transformations: x(t), x(t-2), x(t+4), x(-t), x(3-t), and x(2t)]}
+    \includegraphics[width=\columnwidth]{figure1.jpeg}
     \caption{Subplots of Signal Transformations illustrating shifting, reversal, and scaling.}
 \end{figure}
 
@@ -14,7 +14,7 @@ The composite signal $y(t) = e^{-t}u(t) + u(-1-t)$ was analyzed to observe the i
 
 \begin{figure}[h]
     \centering
-    \fbox{Placeholder: [Figure 2. Signal y(t) showing constant segments, a zero-amplitude gap, and exponential decay]}
+    \includegraphics[width=\columnwidth]{figure2.jpeg}
     \caption{Visualization of composite signal y(t) highlighting piecewise discontinuities.}
 \end{figure}
 
@@ -23,7 +23,7 @@ The comparative analysis of the impulse responses for the lowpass and highpass f
 
 \begin{figure}[h]
     \centering
-    \fbox{Placeholder: [Figure 3. Comparison of Lowpass and Highpass Impulse Responses over 1 second]}
+    \includegraphics[width=\columnwidth]{figure3.jpeg}
     \caption{Overlay of filter impulse responses demonstrating complementary decay behaviors.}
 \end{figure}
 
@@ -32,12 +32,12 @@ The auto-correlation plot provides a statistical measure of how much the signal 
 
 \begin{figure}[h]
     \centering
-    \fbox{Placeholder: [Figure 4. Auto-correlation Rxx(tau) showing symmetry and energy distribution]}
+    \includegraphics[width=\columnwidth]{figure4.jpeg}
     \caption{Auto-correlation function highlighting temporal symmetry and peak energy at zero lag.}
 \end{figure}
 
 \subsection{Numerical Results and Dataset Characteristics}
-To ensure the accuracy of the simulations, specific numerical parameters were maintained across all group members' experiments. The transition from symbolic expressions to numerical data utilized a sampling interval of $dt = 0.01$ seconds, which equates to a sampling frequency of 100 Hz. This resolution was sufficient to capture the rapid transitions in the filter impulse responses and the slope of the ramp function without significant aliasing. The numerical array \texttt{x\_num} was generated over a 20-second window, resulting in a vector of 2001 data points. Consequently, the auto-correlation result \texttt{Rxx} produced a vector of 4001 points, adhering to the standard signal processing rule where the length of a correlation or convolution is $2N-1$. The final amplitude of the auto-correlation peak (~2.7) was achieved by multiplying the raw \texttt{xcorr} output by the time step $dt$, which correctly approximates the continuous-time integral of the signal's square.
+To ensure the accuracy of the simulations, specific n   umerical parameters were maintained across all group members' experiments. The transition from symbolic expressions to numerical data utilized a sampling interval of $dt = 0.01$ seconds, which equates to a sampling frequency of 100 Hz. This resolution was sufficient to capture the rapid transitions in the filter impulse responses and the slope of the ramp function without significant aliasing. The numerical array \texttt{x\_num} was generated over a 20-second window, resulting in a vector of 2001 data points. Consequently, the auto-correlation result \texttt{Rxx} produced a vector of 4001 points, adhering to the standard signal processing rule where the length of a correlation or convolution is $2N-1$. The final amplitude of the auto-correlation peak (~2.7) was achieved by multiplying the raw \texttt{xcorr} output by the time step $dt$, which correctly approximates the continuous-time integral of the signal's square.
 
 \begin{table}[h]
 \centering
