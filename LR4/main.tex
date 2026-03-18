@@ -1,0 +1,79 @@
+% !TEX root = main.tex
+% main.tex
+% This file manages the structure. Your group edits the files in /sections/
+
+\input{preamble.ltx}
+\hyphenation{op-tical net-works semi-conduc-tor}
+
+\begin{document}
+
+% --- TITLE & AUTHORS ---
+% Keep this in main.tex so signatures don't break
+\title{Signals and Systems time domain representation and Signal Operations}
+
+\author{
+    {\small
+    \begin{tabular}{l l l}
+    & \multicolumn{2}{c}{\tiny \textcolor[rgb]{0.9,0.9,0.9}{Participated in \& did the coursework [Y/N]?}} \\ 
+        BAUTISTA,~Alyssa~Nicole~(12449539) & Y & \includegraphics[height=5ex]{Aly.jpg} \\ 
+        GONZALES,~Jeremia~E.~(12486507)     & Y & \includegraphics[height=5ex]{Signature Mia.png} \\ 
+        MENDIOLA,~Keifer~Judd~(12400769)  & Y & \includegraphics[height=5ex]{Kief.png} \\ 
+    \end{tabular}
+    }
+    \thanks{\CrmD\protect\\} 
+    \thanks{Coursework Starting Date: \hspace{1ex} Feb. 3, 2026}
+    \thanks{Submission Date: \hspace{1ex} March 17, 2026}
+}
+
+\markboth{\makebox[\columnwidth]{Coursework \# 02 \hfill}\hspace{\columnsep}\makebox[\columnwidth]{\hfill}}{} 
+\IEEEpubid{\makebox[\columnwidth]{LBYEC2H - EK1 \hfill DLSU}\hspace{\columnsep}\makebox[\columnwidth]{ \hfill {\tiny\textcolor[rgb]{0.4,0.4,0.4}{\prsDy}}}}
+
+\maketitle 
+
+% --- IMPORT SECTIONS ---
+% Group members work on these files simultaneously
+
+\section{Introduction}
+\label{sec:intro}
+\input{sections/01_introduction}
+
+\section{Experimental Design}
+\label{sec:meth}
+\input{sections/02_expdesign}
+
+\section{Analysis of Results}
+\label{sec:results}
+\input{sections/03_results}
+
+\section{Discussion and Conclusion}
+\label{sec:conc}
+\input{sections/04_discconclusion}
+
+\section{Authors Contribution}
+% You can edit this directly here or make a file for it
+On what contributions to specify, see the terms at \url{www.elsevier.com}.
+\begin{enumerate}
+    \item BAUTISTA, Alyssa Nicole : Methodology, Software, Validation, Formal Analysis, Writing – Original Draft, and Review and Editing, Visualization, Project Administration
+    \item GONZALES, Jeremia E.: Conceptualization, Software, Investigation, Resources, Data Curation, Writing – Original Draft, and Review and Editing, Supervision
+    \item MENDIOLA, Keifer Judd: Methodology, Software, Validation, Formal Analysis, Investigation, Data Curation, Writing – Original Draft, and Review and Editing
+\end{enumerate}
+
+% --- REFERENCES ---
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+% --- QUESTIONS ---
+%\section{Answers to Questions}
+%\label{sec:ans2ques}
+%\input{sections/07_answers}
+
+% --- APPENDICES ---
+%\newpage
+%\cleardoublepage
+%\appendices
+
+% I put the template instructions in a separate file. 
+% When you are done reading them, comment out the line below with a %
+%\input{sections/99_instructions} 
+
+\end{document}

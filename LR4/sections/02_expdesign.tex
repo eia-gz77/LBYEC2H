@@ -1,0 +1,61 @@
+The experimental design is structured to systematically investigate the properties of continuous-time signals through mathematical modeling and computational simulation. By leveraging MATLAB’s Symbolic Math Toolbox, this methodology demonstrates how theoretical signal operations can be implemented and validated within a software environment like MATLAB.
+
+\subsection{Signal Construction and Transformation Methodology}
+The core of this experiment involves the symbolic definition of a baseline signal, $x(t)$, which serves as the primary subject for various time-domain operations.  The signal is constructed using Heaviside step functions to isolate its behavior within the specific interval of $t = 0$ to $t = 8$ seconds. The exact symbolic math expression designed for this experiment is:
+
+\begin{equation}
+x(t) = (1 - 0.25t) \cdot (\text{heaviside}(t) - \text{heaviside}(t - 8))
+\end{equation}
+
+The experimental procedure for signal transformation required the modification of the independent variable $t$ to achieve specific outcomes:
+\begin{itemize}
+    \item \textbf{Time Shifting}: Replacing $t$ with $(t - 2)$ for a delay and $(t + 4)$ for an advance.
+    \item \textbf{Time Reversal}: Substituting $t$ with $(-t)$.
+    \item \textbf{Combined Operations}: Implementing $x(3-t)$ to achieve both flipping and shifting.
+    \item \textbf{Time Scaling}: Multiplying $t$ by a constant factor of 2 ($x(2t)$) to achieve compression.
+\end{itemize}
+
+These transformations were consolidated into a single figure using a $3 \times 2$ subplot configuration to allow for simultaneous comparative analysis of the six resulting waveforms.
+
+\subsection{Impulse Response Modeling for Filter Systems}
+The experiment also addressed the representation of system characteristics through the definition of impulse response functions ($h(t)$). Four distinct filter types were modeled using combinations of the Dirac delta function ($\delta(t)$) and the Heaviside step function ($u(t)$) to simulate ideal signal processing behavior. The specific equations implemented for these models are summarized in Table 1.
+
+\begin{table}[htbp]
+\centering
+\caption{Mathematical Expressions for Filter Impulse Responses}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Filter Type} & \textbf{Symbolic Equation} & \textbf{MATLAB Implementation} \\ \hline
+Lowpass & $h_1(t) = e^{-10t}u(t)$ & \texttt{exp(-10*t) * heaviside(t)} \\ \hline
+Highpass & $h_2(t) = \delta(t) - e^{-10t}u(t)$ & \texttt{dirac(t) - exp(-10*t) * heaviside(t)} \\ \hline
+Bandpass & $h_3(t) = e^{-10t}\cos(500t)u(t)$ & \texttt{exp(-10*t)*cos(500*t)*heaviside(t)} \\ \hline
+Bandstop & $h_4(t) = \delta(t) - e^{-10t}\cos(500t)u(t)$ & \texttt{dirac(t) - exp(-10*t)*cos(500*t)*heaviside(t)} \\ \hline
+\end{tabular}%
+}
+\end{table}
+
+\subsection{Numerical Computation and Statistical Correlation}
+To determine the auto-correlation of the signal $x(t)$, the experiment required a transition from symbolic expressions to numerical data arrays. This was achieved by defining a discrete time vector ranging from -10 to 10 seconds with a high-resolution step size of $dt = 0.01$. The symbolic expression $x(t)$ was evaluated over this vector to create the numerical array \texttt{x\_num}. The auto-correlation was computed using the \texttt{xcorr} function, and the resulting sequence was normalized by multiplying by the time step $dt$. 
+
+\subsection{Experimental Pseudocode}
+The following logic describes the programmatic implementation of the experiment:
+
+\begin{enumerate}
+    \item START
+    \item DEFINE symbolic variable `t'
+    \item CONSTRUCT signal x(t) using Heaviside functions for interval [0, 8]
+    \item FOR EACH transformation (shift, flip, scale):
+    \begin{itemize}
+        \item APPLY transformation to t
+        \item PLOT result in 3x2 subplot grid (Figure 1)
+    \end{itemize}
+    \item CONSTRUCT signal y(t) = exp(-t)u(t) + u(-1-t)
+    \item PLOT y(t) for t in range [-6, 6] (Figure 2)
+    \item DEFINE h1(t) through h4(t) for LPF, HPF, BPF, and BSF
+    \item OVERLAY h1(t) and h2(t) (excluding delta) on same axis (Figure 3)
+    \item CONVERT symbolic x(t) to numeric array x\_num with dt = 0.01
+    \item COMPUTE Rxx = xcorr(x\_num, x\_num) * dt
+    \item PLOT Rxx vs tau (Figure 4)
+    \item END
+\end{enumerate}
