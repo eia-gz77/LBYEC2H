@@ -1,61 +1,53 @@
-The experimental design is structured to systematically investigate the properties of continuous-time signals through mathematical modeling and computational simulation. By leveraging MATLAB’s Symbolic Math Toolbox, this methodology demonstrates how theoretical signal operations can be implemented and validated within a software environment like MATLAB.
+The experimental approach for this study centers on the computational modeling and verification of fundamental signal operations—specifically cross-correlation and convolution—using the MATLAB environment. By transitioning from symbolic mathematical definitions to graphical system responses, the design allows for an analytical comparison of how different signals interact over time. The methodology is structured into three primary phases: signal definition, operational segmentation, and computational execution.
 
-\subsection{Signal Construction and Transformation Methodology}
-The core of this experiment involves the symbolic definition of a baseline signal, $x(t)$, which serves as the primary subject for various time-domain operations.  The signal is constructed using Heaviside step functions to isolate its behavior within the specific interval of $t = 0$ to $t = 8$ seconds. The exact symbolic math expression designed for this experiment is:
 
-\begin{equation}
-x(t) = (1 - 0.25t) \cdot (\text{heaviside}(t) - \text{heaviside}(t - 8))
-\end{equation}
+\subsection{Mathematical Signal Definitions}
+The initial stage of the experiment involves the precise mathematical construction of the signals using the MATLAB Symbolic Math Toolbox. Signals are constructed using the \texttt{heaviside(t)} function to define specific temporal windows. For the cross-correlation phase, the ``Target Signal'' $x(t)$ is established as a ramp function bounded between $t = -2$ and $t = 2$, defined by $x(t) = t \cdot [u(t+2) - u(t-2)]$. The ``Search Signal'' $y(t)$ is a reflected and scaled ramp defined as $y(t) = -2t \cdot [u(t+1) - u(t-1)]$. 
 
-The experimental procedure for signal transformation required the modification of the independent variable $t$ to achieve specific outcomes:
-\begin{itemize}
-    \item \textbf{Time Shifting}: Replacing $t$ with $(t - 2)$ for a delay and $(t + 4)$ for an advance.
-    \item \textbf{Time Reversal}: Substituting $t$ with $(-t)$.
-    \item \textbf{Combined Operations}: Implementing $x(3-t)$ to achieve both flipping and shifting.
-    \item \textbf{Time Scaling}: Multiplying $t$ by a constant factor of 2 ($x(2t)$) to achieve compression.
-\end{itemize}
+For the convolution phase, which simulates a system response, a pulse signal $x_{in}(t)$ is created using the expression $x_{in}(t) = u(t) - 2u(t-1) + u(t-2)$. This input is paired with a first-order system impulse response, $h(t) = e^{-10t}u(t)$, representing a rapidly decaying exponential characteristic.
 
-These transformations were consolidated into a single figure using a $3 \times 2$ subplot configuration to allow for simultaneous comparative analysis of the six resulting waveforms.
 
-\subsection{Impulse Response Modeling for Filter Systems}
-The experiment also addressed the representation of system characteristics through the definition of impulse response functions ($h(t)$). Four distinct filter types were modeled using combinations of the Dirac delta function ($\delta(t)$) and the Heaviside step function ($u(t)$) to simulate ideal signal processing behavior. The specific equations implemented for these models are summarized in Table 1.
+\subsection{Segmentation of Interaction Boundary Conditions}
+To calculate the total response, the experimenter must identify the critical time-shifts ($\tau$) where the overlapping area between the signals changes its geometric behavior. The following table summarizes these segments to guide the symbolic integration process:
 
-\begin{table}[htbp]
+\begin{table}[h!]
 \centering
-\caption{Mathematical Expressions for Filter Impulse Responses}
-\resizebox{\columnwidth}{!}{%
-\begin{tabular}{|l|l|l|}
+\begin{tabular}{|c|l|l|l|}
 \hline
-\textbf{Filter Type} & \textbf{Symbolic Equation} & \textbf{MATLAB Implementation} \\ \hline
-Lowpass & $h_1(t) = e^{-10t}u(t)$ & \texttt{exp(-10*t) * heaviside(t)} \\ \hline
-Highpass & $h_2(t) = \delta(t) - e^{-10t}u(t)$ & \texttt{dirac(t) - exp(-10*t) * heaviside(t)} \\ \hline
-Bandpass & $h_3(t) = e^{-10t}\cos(500t)u(t)$ & \texttt{exp(-10*t)*cos(500*t)*heaviside(t)} \\ \hline
-Bandstop & $h_4(t) = \delta(t) - e^{-10t}\cos(500t)u(t)$ & \texttt{dirac(t) - exp(-10*t)*cos(500*t)*heaviside(t)} \\ \hline
-\end{tabular}%
-}
+\textbf{Case} & \textbf{Interaction Phase} & \textbf{Interval Boundary} & \textbf{Integration Limits} \\ \hline
+1 & Pre-Interaction & $\tau < -3$ & Integral = 0 \\ \hline
+2 & Signal Entry & $-3 \leq \tau < -1$ & 2 to $\tau + 1$ \\ \hline
+3 & Full Immersion & $-1 \leq \tau \leq 1$ & $\tau - 1$ to $\tau + 1$ \\ \hline
+4 & Signal Exit & $1 < \tau \leq 3$ & $\tau - 1$ to 2 \\ \hline
+5 & Post-Interaction & $\tau > 3$ & Integral = 0 \\ \hline
+\end{tabular}
+\caption{Boundary conditions for cross-correlation integration.}
 \end{table}
 
-\subsection{Numerical Computation and Statistical Correlation}
-To determine the auto-correlation of the signal $x(t)$, the experiment required a transition from symbolic expressions to numerical data arrays. This was achieved by defining a discrete time vector ranging from -10 to 10 seconds with a high-resolution step size of $dt = 0.01$. The symbolic expression $x(t)$ was evaluated over this vector to create the numerical array \texttt{x\_num}. The auto-correlation was computed using the \texttt{xcorr} function, and the resulting sequence was normalized by multiplying by the time step $dt$. 
-
-\subsection{Experimental Pseudocode}
-The following logic describes the programmatic implementation of the experiment:
-
+\subsection{Step-by-Step Computational Procedure}
+The following logic flow serves as a procedural roadmap for executing the experiment in a MATLAB environment:
 \begin{enumerate}
-    \item START
-    \item DEFINE symbolic variable `t'
-    \item CONSTRUCT signal x(t) using Heaviside functions for interval [0, 8]
-    \item FOR EACH transformation (shift, flip, scale):
-    \begin{itemize}
-        \item APPLY transformation to t
-        \item PLOT result in 3x2 subplot grid (Figure 1)
-    \end{itemize}
-    \item CONSTRUCT signal y(t) = exp(-t)u(t) + u(-1-t)
-    \item PLOT y(t) for t in range [-6, 6] (Figure 2)
-    \item DEFINE h1(t) through h4(t) for LPF, HPF, BPF, and BSF
-    \item OVERLAY h1(t) and h2(t) (excluding delta) on same axis (Figure 3)
-    \item CONVERT symbolic x(t) to numeric array x\_num with dt = 0.01
-    \item COMPUTE Rxx = xcorr(x\_num, x\_num) * dt
-    \item PLOT Rxx vs tau (Figure 4)
-    \item END
+    \item \textbf{Initialize Variables:} Define the independent and shifting time variables using \texttt{syms t tau real}.
+    \item \textbf{Define Core Functions:} Code the mathematical models for $x(t)$, $y(t)$, and $h(t)$ using Heaviside functions.
+    \item \textbf{Calculate Cross-Correlation:} Implement the integral $R_{xy}(\tau) = \int x(t)y(t-\tau) dt$ using the \texttt{int} function for each of the five boundary cases.
+    \item \textbf{Synthesize Results:} Consolidate the individual case integrals into a single unified function using the \texttt{piecewise} command.
+    \item \textbf{Simulate System Output:} Execute the convolution integral $y_{out}(t) = \int x_{in}(\tau)h(t-\tau) d\tau$ for $t \geq 0$.
+    \item \textbf{Visualize Data:} Generate high-resolution plots using \texttt{fplot} with appropriate axis labels and titles.
 \end{enumerate}
+
+\subsection{Procedural Flowchart and Algorithmic Logic}
+The experimental design is visually summarized by the following logical progression:
+\begin{center}
+    \textbf{Start} $\rightarrow$ \textbf{Define Symbolic Signals} $\rightarrow$ \textbf{Boundary Identification} $\rightarrow$ \textbf{Symbolic Integration} $\rightarrow$ \textbf{Piecewise Reconstruction} $\rightarrow$ \textbf{Graphical Rendering} $\rightarrow$ \textbf{End}
+\end{center}
+
+The underlying algorithm for the convolution output response $y(t)$ is implemented as follows:
+\begin{verbatim}
+IF t < 0:
+   Output = 0
+ELSE IF t >= 0:
+   Output = Integral of (x(tau) * exp(-10*(t-tau))) from 0 to t
+Render Plot on Interval [-5, 5]
+\end{verbatim}
+
+
