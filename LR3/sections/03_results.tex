@@ -1,57 +1,37 @@
-The results obtained from the lab activity provide a comprehensive look at the mathematical manipulation of signals and the resulting waveforms. This section consolidates the findings to demonstrate the practical application of signal operations and system modeling in a computational environment.
+\section{Experimental Analysis}
 
-\subsection{Time-Domain Transformations of the Baseline Signal}
-The first phase of the analysis focused on the manipulation of the baseline signal $x(t)$, which is a linear ramp function defined within the interval $t \in [0, 8]$. As observed in the consolidated results, the original signal transitions from an amplitude of 1 at $t=0$ to an amplitude of -1 at $t=8$. The transformation $x(t-2)$ demonstrated a successful time delay, where the entire waveform shifted two units to the right without altering its shape or amplitude. Conversely, $x(t+4)$ showed a time advance, moving the signal four units to the left into the negative time domain. The time-reversal operation $x(-t)$ resulted in a vertical reflection across the y-axis, effectively flipping the ramp’s orientation. The combined operation $x(3-t)$ proved to be the most complex, as it required both a reversal and a 3-second shift, resulting in a signal that peaks at $t=3$. Finally, the time-scaling operation $x(2t)$ compressed the original 8-second duration into a 4-second window, confirming that a scaling factor greater than unity increases the "speed" of the signal relative to the time axis.
+\subsection{Modeling of Primary Symbolic Signals}
+The experimental procedure began with the mathematical definition of two distinct signals, $x(t)$ and $y(t)$. The first signal, $x(t)$, was constructed as a unit ramp function $t$ bounded by the interval $[-2, 2]$, while the second signal, $y(t)$, was defined as a reflected and scaled ramp $-2t$ within the narrower interval $[-1, 1]$. By utilizing Heaviside step functions to define these temporal windows, the signals were established with infinite mathematical precision, avoiding the discretization errors inherent in numerical methods. The initial plots in Figure 1 confirmed the accuracy of these definitions, showing $x(t)$ as the stationary reference and $y(t)$ as the waveform to be shifted for the correlation process.
 
-\begin{figure}[htbp]
+\begin{figure}[h]
     \centering
-    \includegraphics[width=\columnwidth]{figure1.jpeg}
-    \caption{Subplots of Signal Transformations illustrating shifting, reversal, and scaling.}
+    \includegraphics[width=0.8\textwidth]{figure1.png}
+    \caption{Primary Signal}
+    \label{fig:primary_signal}
 \end{figure}
 
-\subsection{Piecewise Evaluation of Composite Signal $y(t)$}
-The composite signal $y(t) = e^{-t}u(t) + u(-1-t)$ was analyzed to observe the interaction between decaying and constant signal components. The resulting plot reveals three distinct operational regions that align with theoretical expectations. For $t < -1$, the signal maintains a constant unit amplitude of 1, governed by the time-reversed and shifted unit step function $u(-1-t)$. A critical observation is the "dead zone" or gap between $t = -1$ and $t = 0$, where neither part of the piecewise function is active, resulting in an amplitude of exactly zero. At $t = 0$, the signal abruptly returns to an amplitude of 1 and immediately begins a smooth exponential decay toward zero, as dictated by the $e^{-t}u(t)$ term. This simulation confirms the system's ability to model signals with high-frequency discontinuities and differing temporal characteristics in a single expression.
+\subsection{Evaluation of Cross-Correlation Boundary Cases}
+The cross-correlation $R_{xy}(\tau)$ was analyzed by evaluating the sliding integration of $x(t)$ and $y(t - \tau)$ across five specific boundary conditions. These cases represent the stages of signal interaction: 
+\begin{itemize}
+    \item \textbf{Case 1} ($\tau < -3$) and \textbf{Case 5} ($\tau \geq 3$): total separation with zero overlap.
+    \item \textbf{Case 2} ($-3 \leq \tau < -1$) and \textbf{Case 4} ($1 \leq \tau < 3$): partial entry and exit of the signals.
+    \item \textbf{Case 3} ($-1 \leq \tau < 1$): full overlap where $y(t)$ is entirely contained within the bounds of $x(t)$.
+\end{itemize}
+Following the identification of these cases, the integration of the product of the signals was performed for each interval. The resulting total cross-correlation function, rendered in Figure 2, combined these piecewise results into a single symmetrical waveform that effectively quantifies the degree of similarity between the two signals as a function of the time-lag $\tau$.
 
-\begin{figure}[htbp]
+\begin{figure}[h]
     \centering
-    \includegraphics[width=\columnwidth]{figure2.jpeg}
-    \caption{Visualization of composite signal y(t) highlighting piecewise discontinuities.}
+    \includegraphics[width=0.8\textwidth]{figure2.png}
+    \caption{Cross-Correlation Cases and Total}
+    \label{fig:cross_correlation}
 \end{figure}
 
-\subsection{Complementary Impulse Responses of Filter Systems}
-The comparative analysis of the impulse responses for the lowpass and highpass filters highlights the mathematical relationship between different system types. The lowpass response $h_1(t)$ is characterized by a positive exponential decay that starts at 1 and approaches zero as time increases, which effectively models the attenuation of high-frequency components. In contrast, the highpass response $h_2(t)$—when plotted excluding the initial Dirac delta impulse—starts at a negative amplitude of -1 and decays upward toward the zero-axis. This inverse relationship is expected, as the highpass filter in this experiment is mathematically derived by subtracting the lowpass response from the input impulse. The visualization confirms that both filters reach a steady state of zero within approximately 0.6 seconds, indicating a stable system response.
+\subsection{LTI System Response via Convolution}
+The final stage of the analysis focused on the behavior of a Linear Time-Invariant (LTI) system subjected to a specific input pulse. The input signal $x_{in}(t)$ was defined as a pulse-like waveform $u(t) - 2u(t-1) + u(t-2)$, and the system was characterized by an exponential impulse response $h(t) = e^{-10t}u(t)$. These signals were first plotted together in Figure 3 to visualize the system's initial state. The convolution was then evaluated through two temporal cases: \textbf{Case 1} ($t < 0$), where no interaction occurs, and \textbf{Case 2} ($t \geq 0$), where the input pulse is processed by the system's exponential decay. The final output response $y_{out}(t)$, as shown in Figure 3, exhibited a sharp rise followed by a rapid nonlinear decay, accurately reflecting the system's time constant and its causal response to the input stimulus.
 
-\begin{figure}[htbp]
+\begin{figure}[h]
     \centering
-    \includegraphics[width=\columnwidth]{figure3.jpeg}
-    \caption{Overlay of filter impulse responses demonstrating complementary decay behaviors.}
+    \includegraphics[width=0.8\textwidth]{figure3.png}
+    \caption{LTI System Cases of Convolution and Output}
+    \label{fig:lti_system}
 \end{figure}
-
-\subsection{Statistical Evaluation of Auto-correlation $R_{xx}(\tau)$}
-The auto-correlation plot provides a statistical measure of how much the signal $x(t)$ overlaps with itself at various time lags. The resulting waveform is perfectly symmetric around the vertical axis $\tau = 0$, where the peak amplitude of approximately 2.7 occurs. This peak represents the total energy of the signal. As the lag $\tau$ increases or decreases, the correlation values transition from positive to negative, specifically forming two distinct "lobes" that reach a minimum of approximately -1.1. These negative values occur because the ramp signal $x(t)$ contains both positive and negative amplitudes; when shifted by certain lags, the positive portions of the original signal align with the negative portions of the shifted version, resulting in a negative correlation product. The correlation eventually returns to zero when the lag exceeds $\pm 8$ seconds, as there is no longer any overlap between the two versions of the signal.
-
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=\columnwidth]{figure4.jpeg}
-    \caption{Auto-correlation function highlighting temporal symmetry and peak energy at zero lag.}
-\end{figure}
-
-\subsection{Numerical Results and Dataset Characteristics}
-
-To ensure the accuracy of the simulations, specific numerical parameters were maintained across all group members' experiments. The transition from symbolic expressions to numerical data utilized a sampling interval of $dt = 0.01$ seconds, which equates to a sampling frequency of 100 Hz. This resolution was sufficient to capture the rapid transitions in the filter impulse responses and the slope of the ramp function without significant aliasing. The numerical array \texttt{x\_num} was generated over a 20-second window, resulting in a vector of 2001 data points. Consequently, the auto-correlation result \texttt{Rxx} produced a vector of 4001 points, adhering to the standard signal processing rule where the length of a correlation or convolution is $2N-1$. The final amplitude of the auto-correlation peak ($\sim$2.7) was achieved by multiplying the raw \texttt{xcorr} output by the time step $dt$, which correctly approximates the continuous-time integral of the signal's square.
-
-\begin{table}[htbp]
-\centering
-\caption{Consolidated Numerical Parameters and Simulation Results}
-\resizebox{\columnwidth}{!}{%
-\begin{tabular}{|l|l|p{3.5cm}|}
-\hline
-\textbf{Parameter} & \textbf{Group Consensus Value} & \textbf{Description} \\ \hline
-Sampling Interval ($dt$) & 0.01 & Time resolution for numerical arrays \\ \hline
-Time Range & -10 to 10 seconds & Total window for signal observation \\ \hline
-Input Vector Size & 2001 samples & Dimensions of \texttt{x\_num} \\ \hline
-Correlation Vector Size & 4001 samples & Dimensions of \texttt{Rxx} \\ \hline
-Max Correlation ($R_{xx}(0)$) & $\sim$2.7 & Peak energy value at zero lag \\ \hline
-\end{tabular}%
-}
-\end{table}
