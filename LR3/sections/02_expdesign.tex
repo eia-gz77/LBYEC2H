@@ -42,12 +42,11 @@ The experimental design is visually summarized by the following logical progress
 \end{center}
 
 The underlying algorithm for the convolution output response $y(t)$ is implemented as follows:
-\begin{verbatim}
+\begin{lstlisting}[breaklines=true, basicstyle=\ttfamily]
 IF t < 0:
-   Output = 0
+    Output = 0
 ELSE IF t >= 0:
-   Output = Integral of (x(tau) * exp(-10*(t-tau))) from 0 to t
+    Output = Integral of (x(tau) * exp(-10*(t-tau))) from 0 to t
 Render Plot on Interval [-5, 5]
-\end{verbatim}
-
+\end{lstlisting}
 

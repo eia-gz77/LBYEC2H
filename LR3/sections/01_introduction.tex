@@ -1,3 +1,19 @@
-This laboratory experiment focuses on the fundamental operations of continuous time signals and systems. Specifically, the objective is to mathematically define, simulate, and visualize operations such as cross-correlation and convolution using computational tools. 
-Signals can be represented mathematically using symbolic expressions. The Heaviside step function is particularly useful in this context as it allows for the precise definition of piecewise continuous signals by acting as a mathematical switch \cite{oppenheim1997}. Moreover, cross-correlation is a measure of similarity between two distinct signals as one is shifted relative to the other. By evaluating the different cases of overlapping intervals, how the features of a reference signal align with another signal over time is determined \cite{haykin1999}. Meanwhile, convolution defines how a system reacts to an input signal based on its impulse response. The resulting output response, y(t) = x(t) * h(t) provides a complete behavioral model of a linear time-invariant system \cite{haykin1999}.
-Several specific MATLAB functions are required to achieve these simulation objectives. The syms function initializes symbolic variables, while heaviside() constructs the discrete transitions in the signal amplitudes. Integration and substitution are also critical for calculating the continuous-time operations. The int() function computes the area under the overlapping signals, and subs() replaces symbolic variables to evaluate specific time shifts. Finally, visualization functions are needed to graphically interpret the results. Functions such as fplot() graph the symbolic expressions over specified domains, while subplot(), title(), and grid on organize multiple graphs into clear, readable figures.
+This laboratory exercise focuses on the fundamental operations of continuous time signals and systems. 
+Specifically, the objective of the exercise is to mathematically define, simulate, and visualize operations of continuous 
+time signals and systems such as cross-correlation and convolution using computational tools. 
+
+In order to attain the objective signals are represented mathematically using symbolic expressions. 
+The Heaviside step function is useful in this context as it allows for the precise definition of piecewise continuous signals 
+by acting as a mathematical switch \cite{oppenheim1997}. To mathematically measure the similarity between these signals, 
+cross-correlation is used. It measures the similarity between two distinct signals as one is shifted relative to the other. 
+By evaluating the different cases of these overlapping intervals the features of a reference signal that aligns with the other 
+signal over time is determined \cite{haykin1999}. Meanwhile, convolution is used to determine how a system reacts to an input 
+signal based on its impulse response. The resulting output response, y(t) = x(t) * h(t) provides a complete behavioral model of a 
+linear time-invariant system \cite{haykin1999}.
+
+Utilizing matlab to apply these concepts, several specific MATLAB functions are needed. 
+First, the syms function which initializes symbolic variables. Second, heaviside() which constructs the discrete transitions in the 
+signal amplitudes. Third, the int() function which computes the area under the overlapping signals. Fourth, subs() which replaces symbolic 
+variables to evaluate specific time shifts. Moreover, visualization functions are needed to graphically interpret the results where 
+functions such as fplot() to graph the symbolic expressions over specified domains, subplot() to display the different plots side-by-side, 
+title() to add a descriptive title to the plots, and grid on to organize multiple graphs into clear, readable figures are used. 
