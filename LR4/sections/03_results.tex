@@ -5,7 +5,7 @@ A periodic signal can be broken down into individual frequency components having
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=\columnwidth]{figure1.jpeg}
+    \includegraphics[width=\columnwidth]{figure1.png}
     \caption{Magnitude spectrum of the exponential Fourier series coefficients for $-10 \le n \le 10$, illustrating peak energy concentration at the fundamental frequency.}
 \end{figure}
 
@@ -14,7 +14,7 @@ Reconstructing a signal that contains amplitude changes using a limited number o
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=\columnwidth]{figure2.jpeg}
+    \includegraphics[width=\columnwidth]{figure2.png}
     \caption{Time-domain comparison of the original sawtooth signal and its truncated Fourier reconstruction, highlighting oscillatory ringing at waveform discontinuities.}
 \end{figure}
 
@@ -23,15 +23,15 @@ A system's transfer function dictates its frequency filtering behavior and the 3
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=\columnwidth]{figure3.jpeg}
+    \includegraphics[width=\columnwidth]{figure3.png}
     \caption{Linear proportional relationship between the exponential system parameter $a$ and the resulting positive 3dB cut-off frequency magnitude $\omega_c$.}
 \end{figure}
 
 \subsection{Parametric Bandwidth Expansion}
-Increasing a low-pass filter's cut-off frequency naturally widens its passband that allowing a broader range of frequencies to pass through the system unattenuated. The practical implications of the previously established linear relationship are validated by evaluating the magnitude response curves $|H(\omega)|$ at discrete parametric intervals of $a=10$, $50$, $80$, and $100$. As the defining parameter $a$ scales upward the attenuation slopes relaxes causing the bell-shaped passband to widen uniformly outward across the frequency axis. Consequently, higher cut-off frequencies natively expand the system's absolute bandwidth permitting a broader continuous spectrum of input frequencies to propagate through the system unattenuated [2].
+Increasing a low-pass filter's cut-off frequency naturally widens its passband that allowing a broader range of frequencies to pass through the system unattenuated. The practical implications of the previously established linear relationship are validated by evaluating the magnitude response curves $|H(\omega)|$ at discrete parametric intervals of $a=10$, $50$, $80$, and $100$. As the defining parameter $a$ scales upward the attenuation slopes relaxes causing the bell-shaped passband to widen uniformly outward across the frequency axis. Consequently, higher cut-off frequencies natively expand the system's absolute bandwidth permitting a broader continuous spectrum of input frequencies to propagate through the system unattenuated \cite{haykin1999}.
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=\columnwidth]{figure4.jpeg}
+    \includegraphics[width=\columnwidth]{figure4.png}
     \caption{Superimposed magnitude responses demonstrating continuous bandwidth expansion as the exponential parameter $a$ increases from 10 to 100.}
 \end{figure}
