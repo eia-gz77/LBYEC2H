@@ -1,61 +1,51 @@
-The experimental design is structured to systematically investigate the properties of continuous-time signals through mathematical modeling and computational simulation. By leveraging MATLAB’s Symbolic Math Toolbox, this methodology demonstrates how theoretical signal operations can be implemented and validated within a software environment like MATLAB.
+This section outlines the procedural framework used to decompose periodic signals and analyze system impulse responses using MATLAB's computational tools. The design is structured to ensure that the mathematical transition from the time domain to the frequency domain is accurate and replicable.
 
-\subsection{Signal Construction and Transformation Methodology}
-The core of this experiment involves the symbolic definition of a baseline signal, $x(t)$, which serves as the primary subject for various time-domain operations.  The signal is constructed using Heaviside step functions to isolate its behavior within the specific interval of $t = 0$ to $t = 8$ seconds. The exact symbolic math expression designed for this experiment is:
+\subsection{Signal Modeling and Fourier Series Decomposition}
+The first phase of the experiment focuses on representing a periodic sawtooth signal, $x(t)$, through an Exponential Fourier Series. Based on the visual characteristics of the signal provided in the laboratory specifications, the period is identified as $T = 0.75$, which establishes the fundamental frequency as shown in Equation \ref{eq:w0}:
 
 \begin{equation}
-x(t) = (1 - 0.25t) \cdot (\text{heaviside}(t) - \text{heaviside}(t - 8))
+\omega_0 = \frac{2\pi}{T}
+\label{eq:w0}
 \end{equation}
 
-The experimental procedure for signal transformation required the modification of the independent variable $t$ to achieve specific outcomes:
-\begin{itemize}
-    \item \textbf{Time Shifting}: Replacing $t$ with $(t - 2)$ for a delay and $(t + 4)$ for an advance.
-    \item \textbf{Time Reversal}: Substituting $t$ with $(-t)$.
-    \item \textbf{Combined Operations}: Implementing $x(3-t)$ to achieve both flipping and shifting.
-    \item \textbf{Time Scaling}: Multiplying $t$ by a constant factor of 2 ($x(2t)$) to achieve compression.
-\end{itemize}
+To reconstruct the signal, the exponential Fourier coefficients ($C_n$) must be calculated. The methodology employs the following integral expression evaluated over one period:
 
-These transformations were consolidated into a single figure using a $3 \times 2$ subplot configuration to allow for simultaneous comparative analysis of the six resulting waveforms.
+\begin{equation}
+C_n = \frac{1}{T} \int_{t_0}^{t_0+T} x(t) e^{-jn\omega_0 t} dt
+\end{equation}
 
-\subsection{Impulse Response Modeling for Filter Systems}
-The experiment also addressed the representation of system characteristics through the definition of impulse response functions ($h(t)$). Four distinct filter types were modeled using combinations of the Dirac delta function ($\delta(t)$) and the Heaviside step function ($u(t)$) to simulate ideal signal processing behavior. The specific equations implemented for these models are summarized in Table 1.
+The experimental setup utilizes MATLAB’s Symbolic Math Toolbox to define the signal $x(t) = -2t$ and solve the integral for a harmonic range of $n$ from $-10$ to $10$. A critical component of this design involves handling numerical singularities; an infinitesimal constant ($eps$) is added to the frequency index when $n=0$ to prevent division-by-zero errors during numerical evaluation.
 
-\begin{table}[htbp]
-\centering
-\caption{Mathematical Expressions for Filter Impulse Responses}
-\resizebox{\columnwidth}{!}{%
-\begin{tabular}{|l|l|l|}
-\hline
-\textbf{Filter Type} & \textbf{Symbolic Equation} & \textbf{MATLAB Implementation} \\ \hline
-Lowpass & $h_1(t) = e^{-10t}u(t)$ & \texttt{exp(-10*t) * heaviside(t)} \\ \hline
-Highpass & $h_2(t) = \delta(t) - e^{-10t}u(t)$ & \texttt{dirac(t) - exp(-10*t) * heaviside(t)} \\ \hline
-Bandpass & $h_3(t) = e^{-10t}\cos(500t)u(t)$ & \texttt{exp(-10*t)*cos(500*t)*heaviside(t)} \\ \hline
-Bandstop & $h_4(t) = \delta(t) - e^{-10t}\cos(500t)u(t)$ & \texttt{dirac(t) - exp(-10*t)*cos(500*t)*heaviside(t)} \\ \hline
-\end{tabular}%
-}
-\end{table}
+\subsection{System Response and Frequency Analysis}
+The second phase involves characterizing a system defined by its impulse response. The system is modeled by the function $h(t) = \frac{a}{2}e^{-a|t|}$ where $a \ge 0$. The experimental design uses the \texttt{fourier} function in MATLAB to determine the transfer function, $H(\omega)$, in the frequency domain.
 
-\subsection{Numerical Computation and Statistical Correlation}
-To determine the auto-correlation of the signal $x(t)$, the experiment required a transition from symbolic expressions to numerical data arrays. This was achieved by defining a discrete time vector ranging from -10 to 10 seconds with a high-resolution step size of $dt = 0.01$. The symbolic expression $x(t)$ was evaluated over this vector to create the numerical array \texttt{x\_num}. The auto-correlation was computed using the \texttt{xcorr} function, and the resulting sequence was normalized by multiplying by the time step $dt$. 
+A key performance metric in this design is the 3dB cut-off frequency ($\omega_c$), defined as the point where the magnitude of the transfer function drops to $1/\sqrt{2}$ of its maximum value. The methodology requires solving the following magnitude equation to obtain a symbolic expression for $\omega_c$:
 
-\subsection{Experimental Pseudocode}
-The following logic describes the programmatic implementation of the experiment:
+\begin{equation}
+|H(\omega)| = \frac{1}{\sqrt{2}}
+\end{equation}
+
+\subsection{Step-by-Step Procedure}
+To ensure the replicability of the results, the following procedural steps are implemented:
 
 \begin{enumerate}
-    \item START
-    \item DEFINE symbolic variable `t'
-    \item CONSTRUCT signal x(t) using Heaviside functions for interval [0, 8]
-    \item FOR EACH transformation (shift, flip, scale):
-    \begin{itemize}
-        \item APPLY transformation to t
-        \item PLOT result in 3x2 subplot grid (Figure 1)
-    \end{itemize}
-    \item CONSTRUCT signal y(t) = exp(-t)u(t) + u(-1-t)
-    \item PLOT y(t) for t in range [-6, 6] (Figure 2)
-    \item DEFINE h1(t) through h4(t) for LPF, HPF, BPF, and BSF
-    \item OVERLAY h1(t) and h2(t) (excluding delta) on same axis (Figure 3)
-    \item CONVERT symbolic x(t) to numeric array x\_num with dt = 0.01
-    \item COMPUTE Rxx = xcorr(x\_num, x\_num) * dt
-    \item PLOT Rxx vs tau (Figure 4)
-    \item END
+    \item \textbf{Symbolic Initialization:} Define $t$, $n$, $\omega$, and $a$ as symbolic variables within the MATLAB workspace.
+    \item \textbf{Signal Construction:} Define the periodic signal $x(t)$ and extend it to three full periods using \texttt{piecewise} or \texttt{heaviside} functions to observe signal behavior across the interval $-1 \le t \le 1$.
+    \item \textbf{Coefficient Calculation:} Utilize the \texttt{int} function to compute the symbolic expression for the Fourier coefficients $C_n$.
+    \item \textbf{Numerical Reconstruction:} Convert symbolic coefficients to numerical values and reconstruct the signal $x_{pN}(t)$ by summing the harmonics from $n = -10$ to $10$.
+    \item \textbf{Signal Comparison:} Plot the original signal against the truncated Fourier series using a time increment of $\Delta t = 1/1000$ to visualize the approximation and the effects of the Gibbs phenomenon.
+    \item \textbf{System Characterization:} Define the impulse response $h(t)$, compute the Fourier Transform $H(\omega)$, and solve for the cut-off frequency $\omega_c$.
+    \item \textbf{Parametric Sweep:} Generate magnitude response plots for $|H(\omega)|$ across varying system parameters $a = [10, 50, 80, 100]$ to observe bandwidth variations.
 \end{enumerate}
+
+\subsection{Computational Logic}
+The programmatic flow of the experiment is summarized in the following logic:
+
+\begin{itemize}
+    \item Initialize symbolic environment and define fundamental signal parameters ($T$, $\omega_0$).
+    \item Evaluate the integral for $C_n$ and store coefficients in a vector array.
+    \item Loop through the harmonic indices to compute the partial sum of the Fourier series.
+    \item Apply the Fourier Transform to the system impulse response and solve for $\omega_c$ using the \texttt{solve} command.
+    \item Visualize the magnitude of $C_n$, the reconstructed time-domain signal, and the frequency-domain magnitude responses.
+\end{itemize}
+
