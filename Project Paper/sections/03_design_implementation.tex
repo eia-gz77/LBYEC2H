@@ -1,0 +1,14 @@
+\subsection{Signal Modeling}
+
+The architectural block diagram illustrated in Figure~\ref{fig:model} details the complete signal modeling and recovery utilized in this study. The forward modeling process initiates with the synthesis of the target astrophysical event, defined as a linear frequency-modulated (LFM) chirp spanning the 30--300~Hz band, denoted as the input $x(t)$. To replicate the physical interference actually observed at the detector, this ideal signal undergoes convolution with empirical LIGO strain data. This strain data serves as the system's impulse response, $h(t)$. The resulting operation yields the distorted output $y(t)$, representing the contaminated data stream that an interferometer would theoretically record.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{Model.png} 
+    \caption{Block diagram detailing the complete signal modeling and recovery.}
+    \label{fig:model}
+\end{figure}
+
+The subsequent phase of the model attempts to mathematically invert this environmental degradation. Both the distorted output $y(t)$ and the known system impulse response $h(t)$ are converted into the frequency domain via a Fast Fourier Transform (FFT), producing $Y(f)$ and $H(f)$, respectively. Spectral deconvolution is then executed through a direct division operation: $Y(f) / (H(f) + \epsilon)$. The inclusion of the regularization parameter, $\epsilon$, appears strictly necessary in this framework. Without it, attempting division in spectral regions where the detector sensitivity approaches zero would likely cause asymptotic noise amplification, destabilizing the entire numerical array. Following this stabilized inversion, an Inverse Fast Fourier Transform (IFFT) returns the intermediate estimated signal, $\hat{X}(f)$, back to the time domain.
+
+While spectral division retrieves the primary geometry of the chirp, it inevitably introduces high-frequency computational artifacts alongside residual 60~Hz harmonics. Relying solely on discrete deconvolution may prove insufficient for precise waveform reconstruction, suggesting that further physical conditioning is required. Therefore, the final stage routes the intermediate recovered signal into four parallel continuous-time filter networks. The signal is convolved independently with Butterworth, Chebyshev I, Chebyshev II, and Elliptic transfer functions, denoted as $H(s)$. Each operation yields a distinct output (Result 1 through 4), facilitating a direct comparative analysis of how varying magnitude responses and phase characteristics affect the final attenuation of out-of-band interference.

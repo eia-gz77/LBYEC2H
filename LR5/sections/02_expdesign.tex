@@ -1,61 +1,60 @@
-The experimental design is structured to systematically investigate the properties of continuous-time signals through mathematical modeling and computational simulation. By leveraging MATLAB’s Symbolic Math Toolbox, this methodology demonstrates how theoretical signal operations can be implemented and validated within a software environment like MATLAB.
+The primary objective of this experiment is to design, simulate, and compare four major types of analog filter approximations: Butterworth, Chebyshev Type 1, Chebyshev Type 2, and Elliptic filters. The goal is to determine how well each mathematical model adheres to a specific set of bandpass constraints and how they deviate from an ideal filter response. This methodology utilizes a computational approach to determine the minimum required filter order, synthesize the transfer functions in the $s$-domain, and transform those functions into the frequency domain for visual analysis of magnitude and phase.
 
-\subsection{Signal Construction and Transformation Methodology}
-The core of this experiment involves the symbolic definition of a baseline signal, $x(t)$, which serves as the primary subject for various time-domain operations.  The signal is constructed using Heaviside step functions to isolate its behavior within the specific interval of $t = 0$ to $t = 8$ seconds. The exact symbolic math expression designed for this experiment is:
+\subsection*{2.1 Technical Specifications and Constraints}
 
-\begin{equation}
-x(t) = (1 - 0.25t) \cdot (\text{heaviside}(t) - \text{heaviside}(t - 8))
-\end{equation}
+The design process is governed by a set of rigid parameters that define the behavior of the bandpass filter. The passband, which is the range of frequencies allowed to pass through the filter, is set between a lower edge of $2000$ rad/sec and an upper edge of $4000$ rad/sec. Within this region, a maximum ripple of $1$ dB is permitted. The stopbands, where the signal must be significantly blocked, are defined as frequencies below $1500$ rad/sec and above $4500$ rad/sec. In these regions, the filter must provide at least $60$ dB of attenuation. These requirements serve as the foundation for calculating the mathematical complexity of each filter.
 
-The experimental procedure for signal transformation required the modification of the independent variable $t$ to achieve specific outcomes:
-\begin{itemize}
-    \item \textbf{Time Shifting}: Replacing $t$ with $(t - 2)$ for a delay and $(t + 4)$ for an advance.
-    \item \textbf{Time Reversal}: Substituting $t$ with $(-t)$.
-    \item \textbf{Combined Operations}: Implementing $x(3-t)$ to achieve both flipping and shifting.
-    \item \textbf{Time Scaling}: Multiplying $t$ by a constant factor of 2 ($x(2t)$) to achieve compression.
-\end{itemize}
-
-These transformations were consolidated into a single figure using a $3 \times 2$ subplot configuration to allow for simultaneous comparative analysis of the six resulting waveforms.
-
-\subsection{Impulse Response Modeling for Filter Systems}
-The experiment also addressed the representation of system characteristics through the definition of impulse response functions ($h(t)$). Four distinct filter types were modeled using combinations of the Dirac delta function ($\delta(t)$) and the Heaviside step function ($u(t)$) to simulate ideal signal processing behavior. The specific equations implemented for these models are summarized in Table 1.
-
-\begin{table}[htbp]
-\centering
-\caption{Mathematical Expressions for Filter Impulse Responses}
-\resizebox{\columnwidth}{!}{%
-\begin{tabular}{|l|l|l|}
+\begin{center}
+\small
+\begin{tabular}{|l|c|}
 \hline
-\textbf{Filter Type} & \textbf{Symbolic Equation} & \textbf{MATLAB Implementation} \\ \hline
-Lowpass & $h_1(t) = e^{-10t}u(t)$ & \texttt{exp(-10*t) * heaviside(t)} \\ \hline
-Highpass & $h_2(t) = \delta(t) - e^{-10t}u(t)$ & \texttt{dirac(t) - exp(-10*t) * heaviside(t)} \\ \hline
-Bandpass & $h_3(t) = e^{-10t}\cos(500t)u(t)$ & \texttt{exp(-10*t)*cos(500*t)*heaviside(t)} \\ \hline
-Bandstop & $h_4(t) = \delta(t) - e^{-10t}\cos(500t)u(t)$ & \texttt{dirac(t) - exp(-10*t)*cos(500*t)*heaviside(t)} \\ \hline
-\end{tabular}%
-}
-\end{table}
+\textbf{Design Parameter} & \textbf{Symbol} & \textbf{Target Value} \\ \hline
+Lower Passband Frequency & $W_{p1}$ & $2000$ rad/sec \\ \hline
+Upper Passband Frequency & $W_{p2}$ & $4000$ rad/sec \\ \hline
+Lower Stopband Frequency & $W_{s1}$ & $1500$ rad/sec \\ \hline
+Upper Stopband Frequency & $W_{s2}$ & $4500$ rad/sec \\ \hline
+Maximum Passband Loss & $R_p$ & $1$ dB \\ \hline
+Minimum Stopband Attenuation & $R_s$ & $60$ dB \\ \hline
+\end{tabular}
+\caption{Required Filter Performance Specifications}
+\end{center}
 
-\subsection{Numerical Computation and Statistical Correlation}
-To determine the auto-correlation of the signal $x(t)$, the experiment required a transition from symbolic expressions to numerical data arrays. This was achieved by defining a discrete time vector ranging from -10 to 10 seconds with a high-resolution step size of $dt = 0.01$. The symbolic expression $x(t)$ was evaluated over this vector to create the numerical array \texttt{x\_num}. The auto-correlation was computed using the \texttt{xcorr} function, and the resulting sequence was normalized by multiplying by the time step $dt$. 
+\subsection*{2.2 Mathematical Modeling and Order Calculation}
 
-\subsection{Experimental Pseudocode}
-The following logic describes the programmatic implementation of the experiment:
+In analog filter design, the system is represented by a transfer function $H(s)$ in the Laplace domain, which is a ratio of two polynomials. The complexity of the filter is defined by its "order" ($N$); a higher order results in a steeper transition between the passband and stopband but increases the mathematical and physical complexity of the system. 
 
-\begin{enumerate}
-    \item START
-    \item DEFINE symbolic variable `t'
-    \item CONSTRUCT signal x(t) using Heaviside functions for interval [0, 8]
-    \item FOR EACH transformation (shift, flip, scale):
-    \begin{itemize}
-        \item APPLY transformation to t
-        \item PLOT result in 3x2 subplot grid (Figure 1)
-    \end{itemize}
-    \item CONSTRUCT signal y(t) = exp(-t)u(t) + u(-1-t)
-    \item PLOT y(t) for t in range [-6, 6] (Figure 2)
-    \item DEFINE h1(t) through h4(t) for LPF, HPF, BPF, and BSF
-    \item OVERLAY h1(t) and h2(t) (excluding delta) on same axis (Figure 3)
-    \item CONVERT symbolic x(t) to numeric array x\_num with dt = 0.01
-    \item COMPUTE Rxx = xcorr(x\_num, x\_num) * dt
-    \item PLOT Rxx vs tau (Figure 4)
-    \item END
-\end{enumerate}
+The first step in the procedure involves using specialized algorithms, such as \texttt{buttord} and \texttt{ellipord}, to calculate the lowest integer order $N$ that satisfies the $1$ dB ripple and $60$ dB attenuation requirements. These functions analyze the "steepness" required to drop from the passband to the stopband. Once $N$ is found, the specific coefficients for the numerator and denominator of the transfer function are generated using standard approximation formulas for each filter type.
+
+\subsection*{2.3 Frequency Response Transformation}
+
+To evaluate how these filters perform across a real-world spectrum, the $s$-domain transfer function must be evaluated as a function of angular frequency ($j\omega$). The experiment defines a sample range from $500$ to $6000$ rad/sec. By applying the \texttt{freqs} function, the theoretical Laplace expression is converted into a complex frequency response. From this result, the magnitude is derived by taking the absolute value, allowing us to see how much of the signal is kept or blocked. The phase is derived by calculating the angle of the response in radians, which illustrates how the filter shifts the timing of the input signal. 
+
+Finally, an ideal filter is mathematically constructed to serve as a benchmark. This ideal model is defined to have a magnitude of exactly $1$ within the $2000$--$4000$ rad/sec range and $0$ everywhere else, with a perfectly flat phase. Comparing the four analog designs to this ideal model reveals the inherent trade-offs of each approximation, such as the Butterworth’s smoothness versus the Elliptic’s rapid roll-off.
+
+\subsection*{2.4 Procedural Logic (Pseudocode)}
+
+The following logic outlines the step-by-step execution used to produce the experimental data and corresponding visualizations:
+
+\begin{verbatim}
+1.  START
+2.  INITIALIZE design constants:
+        Wp = [2000, 4000], Ws = [1500, 4500]
+        Rp = 1, Rs = 60
+        Frequency_Range (w) = 500 to 6000 step 10
+3.  FOR EACH Approximation (Butterworth, Cheby1, Cheby2, Elliptic):
+        a. Determine Order (N) and Cutoff (Wn) using 'ord' tools
+        b. Generate transfer function coefficients (b, a)
+        c. Transform (b, a) to frequency response (h) using 'freqs'
+        d. Magnitude_Data = abs(h)
+        e. Phase_Data = angle(h)
+        f. Add Magnitude_Data to Figure 1
+        g. Add Phase_Data to Figure 2
+    END FOR
+4.  CREATE Ideal Filter:
+        IF (w >= 2000 AND w <= 4000) THEN Magnitude = 1
+        ELSE Magnitude = 0
+        Phase = 0 for all w
+5.  OVERLAY Ideal Filter data on Figures 1 and 2
+6.  LABEL axes and APPLY legends
+7.  END
+\end{verbatim}
