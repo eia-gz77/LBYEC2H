@@ -1,51 +1,29 @@
-This section outlines the procedural framework used to decompose periodic signals and analyze system impulse responses using MATLAB's computational tools. The design is structured to ensure that the mathematical transition from the time domain to the frequency domain is accurate and replicable.
+\subsection{Gravitational Wave Detection and Modern Digital Constraints}
+The direct observation of gravitational waves fundamentally relies on advanced signal processing to isolate transient astrophysical phenomena from environmental noise \cite{1}. In the primary literature, this extraction is predominantly executed using complex digital signal processing (DSP) pipelines. These systems utilize matched filtering algorithms and adaptive digital notch filters to dynamically track and eliminate 60~Hz power-line harmonics and seismic interference \cite{1}. While effective, these digital methods impose a substantial computational demand and operate almost entirely in the discrete-time domain post-digitization.
 
-\subsection{Signal Modeling and Fourier Series Decomposition}
-The first phase of the experiment focuses on representing a periodic sawtooth signal, $x(t)$, through an Exponential Fourier Series. Based on the visual characteristics of the signal provided in the laboratory specifications, the period is identified as $T = 0.75$, which establishes the fundamental frequency as shown in Equation \ref{eq:w0}:
+The prevalence of these digital back-ends is supported by the standardized access provided by the LIGO Open Science Center (LOSC), which facilitates the deployment of coherent search algorithms within non-Gaussian noise floors \cite{6, 10}. However, because these methodologies depend on post-digitization processing, they are inherently constrained by the dynamic range of the initial sampling hardware. This architectural landscape suggests that while digital identification remains the standard for statistical verification, it is primarily reactive to terrestrial interference that has already permeated the data stream.
 
-\begin{equation}
-\omega_0 = \frac{2\pi}{T}
-\label{eq:w0}
-\end{equation}
+\subsection{Physical Modeling and the LTI Framework}
+The theoretical foundation for front-end, continuous-time signal conditioning relies on classical systems engineering literature. Standard texts define the physical constraints of Linear Time-Invariant (LTI) systems and establish the mathematical principles of convolution used to model environmental distortion \cite{2}. Under the LTI framework, the signal path from the gravitational event through the interferometric sensors operates as a linear system where the distorted output $y(t)$ is the convolution of the pure astrophysical signal $x(t)$ with the system’s impulse response $h(t)$, represented by $y(t) = x(t) * h(t)$.
 
-To reconstruct the signal, the exponential Fourier coefficients ($C_n$) must be calculated. The methodology employs the following integral expression evaluated over one period:
+This modeling approach appears particularly relevant for binary black hole mergers, which astrophysical theory characterizes as a linear frequency-modulated (LFM) chirp where orbital decay dictates a monotonic increase in frequency and amplitude \cite{7}. By treating the observatory as a deterministic LTI system \cite{2}, the environmental distortion of this known chirp waveform \cite{7} is viewed as a physical convolution. This theoretical alignment justifies the application of inverse filtering, which seeks to mathematically reverse the environmental influence before the signal is processed by stochastic digital identification algorithms.
 
-\begin{equation}
-C_n = \frac{1}{T} \int_{t_0}^{t_0+T} x(t) e^{-jn\omega_0 t} dt
-\end{equation}
+\subsection{Foundations of Filter Topologies and Design Trade-offs}
+Established analog filter design literature outlines the fundamental mathematical trade-offs required to condition continuous signals. These texts strictly define the relationships between magnitude response, phase distortion, and roll-off steepness inherent in classical Butterworth, Chebyshev, and Elliptic filter topologies \cite{3}. Standard design principles categorize Butterworth filters by their maximally flat passband, preserving target frequencies without amplitude distortion at the cost of a gradual transition band \cite{9}.
 
-The experimental setup utilizes MATLAB’s Symbolic Math Toolbox to define the signal $x(t) = -2t$ and solve the integral for a harmonic range of $n$ from $-10$ to $10$. A critical component of this design involves handling numerical singularities; an infinitesimal constant ($eps$) is added to the frequency index when $n=0$ to prevent division-by-zero errors during numerical evaluation.
+Conversely, Chebyshev and Elliptic architectures introduce equiripple behavior to achieve highly aggressive transition characteristics \cite{3, 9}. Technical consensus in analog theory indicates that no single topology is universally superior; the architecture must be selected based on the spectral proximity of the interference. Given the significant amplitude of the 60~Hz interference adjacent to the 30--300~Hz astrophysical band, the sharp magnitude roll-off of an Elliptic topology emerges as a necessary compromise. It achieves the required attenuation, even if it introduces non-linearities that simpler designs omit.
 
-\subsection{System Response and Frequency Analysis}
-The second phase involves characterizing a system defined by its impulse response. The system is modeled by the function $h(t) = \frac{a}{2}e^{-a|t|}$ where $a \ge 0$. The experimental design uses the \texttt{fourier} function in MATLAB to determine the transfer function, $H(\omega)$, in the frequency domain.
+\subsection{Deconvolution and the Challenges of Inverse Filtering}
+Restoring the original signal trajectory requires the mathematical inversion of the environmental convolution through spectral deconvolution. According to the principles of discrete-time signal processing, this involves dividing the Fourier transform of the captured data by the system’s frequency response: $\hat{X}(f) = Y(f)/H(f)$ \cite{4}. While a standard tool for signal restoration, it remains an ill-posed problem highly susceptible to noise enhancement \cite{4}.
 
-A key performance metric in this design is the 3dB cut-off frequency ($\omega_c$), defined as the point where the magnitude of the transfer function drops to $1/\sqrt{2}$ of its maximum value. The methodology requires solving the following magnitude equation to obtain a symbolic expression for $\omega_c$:
+In frequency regions where the detector's sensitivity $H(f)$ is low, division by small values causes background noise to amplify exponentially \cite{4, 5}. This phenomenon is particularly problematic for LFM chirps, as their broadband nature forces them across these low-sensitivity spectral regions. Consequently, the recovery process cannot rely on deconvolution alone; it necessitates high-order filtering to precisely excise the high-frequency artifacts generated by the inversion process.
 
-\begin{equation}
-|H(\omega)| = \frac{1}{\sqrt{2}}
-\end{equation}
+\subsection{Discrete Realization via Bilinear Mapping}
+To bridge the gap between continuous-time analog theory and modern digital simulation, literature provides mapping techniques such as the Bilinear Transformation. This numerical method maps the s-plane into the unit circle of the z-plane, ensuring that the stability of a physical analog filter is preserved within a digital environment \cite{5}. A characteristic of this mapping is frequency warping, a non-linear relationship between analog and digital frequencies that increases as the signal approaches the Nyquist limit \cite{5, 8}.
 
-\subsection{Step-by-Step Procedure}
-To ensure the replicability of the results, the following procedural steps are implemented:
+Standard DSP texts suggest that while warping must be accounted for via pre-warping techniques, the Bilinear Transformation remains a highly reliable method for modeling physical hardware responses \cite{4, 8}. For the low-frequency 30--300~Hz band utilized in black hole detection, the warping effect is minimal. This allows researchers to evaluate the efficacy of continuous-time architectures \cite{3} within a controlled digital simulation environment without losing the underlying physical relevance of the analog design.
 
-\begin{enumerate}
-    \item \textbf{Symbolic Initialization:} Define $t$, $n$, $\omega$, and $a$ as symbolic variables within the MATLAB workspace.
-    \item \textbf{Signal Construction:} Define the periodic signal $x(t)$ and extend it to three full periods using \texttt{piecewise} or \texttt{heaviside} functions to observe signal behavior across the interval $-1 \le t \le 1$.
-    \item \textbf{Coefficient Calculation:} Utilize the \texttt{int} function to compute the symbolic expression for the Fourier coefficients $C_n$.
-    \item \textbf{Numerical Reconstruction:} Convert symbolic coefficients to numerical values and reconstruct the signal $x_{pN}(t)$ by summing the harmonics from $n = -10$ to $10$.
-    \item \textbf{Signal Comparison:} Plot the original signal against the truncated Fourier series using a time increment of $\Delta t = 1/1000$ to visualize the approximation and the effects of the Gibbs phenomenon.
-    \item \textbf{System Characterization:} Define the impulse response $h(t)$, compute the Fourier Transform $H(\omega)$, and solve for the cut-off frequency $\omega_c$.
-    \item \textbf{Parametric Sweep:} Generate magnitude response plots for $|H(\omega)|$ across varying system parameters $a = [10, 50, 80, 100]$ to observe bandwidth variations.
-\end{enumerate}
+\subsection{Synthesis}
+This project distinguishes itself from primary modern works by focusing strictly on the capabilities of foundational analog filtering. While prior work frequently relies on adaptive digital algorithms to retroactively cancel 60~Hz electromagnetic interference \cite{1}, this study restricts the solution to front-end continuous-time architecture. It investigates whether static, continuous-time analog bandpass geometries can independently achieve the attenuation necessary to isolate a transient chirp. By applying classical analog design principles \cite{3} directly to empirical strain data \cite{1}, this research isolates the exact mathematical filter tolerances specifically the passband and stopband ripples of the Elliptic filter required to physically separate a cosmic signal from severe electromagnetic interference prior to advanced digital processing.
 
-\subsection{Computational Logic}
-The programmatic flow of the experiment is summarized in the following logic:
-
-\begin{itemize}
-    \item Initialize symbolic environment and define fundamental signal parameters ($T$, $\omega_0$).
-    \item Evaluate the integral for $C_n$ and store coefficients in a vector array.
-    \item Loop through the harmonic indices to compute the partial sum of the Fourier series.
-    \item Apply the Fourier Transform to the system impulse response and solve for $\omega_c$ using the \texttt{solve} command.
-    \item Visualize the magnitude of $C_n$, the reconstructed time-domain signal, and the frequency-domain magnitude responses.
-\end{itemize}
-
+The technical literature reveals a fundamental tension between computationally intensive digital identification strategies \cite{1, 10} and the deterministic potential of foundational systems theory \cite{2}. By unifying the mathematical precision of analog filter topologies \cite{3, 9} with the practical realization enabled by Bilinear mapping \cite{5}, this study evaluates whether the physical constraints of the detector can be pre-emptively addressed. This approach shifts the detection paradigm from a reactive digital strategy toward an architectural front-end method, offering a mathematically rigorous framework for signal isolation in high-interference environments.

@@ -1,20 +1,13 @@
-The primary objective of this laboratory exercise is to mathematically analyze and computationally simulate continuous-time signals using 
-Fourier Series and Fourier Transforms. Analyzing signals in the frequency domain shows the individual sinusoidal frequency components that 
-make up complex waveforms \cite{oppenheim1997}. 
+\subsection{Problem Formulation}
+The detection of cosmic events, such as binary black hole mergers, requires measuring microscopic distortions in spacetime via large-scale interferometers. Researchers mathematically model the target signal for these events as a Linear Frequency Modulated (LFM) chirp. For typical stellar-mass mergers, this chirp sweeps dynamically from a lower bound of 30~Hz up to approximately 300~Hz. However, ground-based observatories operate in physical environments that introduce substantial noise. This background interference constitutes the physical system's impulse response. Assuming relatively brief observation windows, the observatory environment functions as a quasi-stationary Linear Time-Invariant (LTI) system. Consequently, the detection of a gravitational wave may be modeled as the time-domain convolution of the pure chirp signal with environmental noise.
 
-The exponential Fourier Series specifically decomposes continuous-time periodic signals into an infinite sum of complex exponential 
-functions \cite{riskin2003}.
-Reconstructing a signal using only a finite number of exponential terms results in waveform that exhibits oscillations 
-near discontinuities which is a behavior known as the Gibbs phenomenon \cite{haykin1999}.
+A significant signal processing challenge arises because large-scale observatories rely on the standard electrical grid. This infrastructure introduces a continuous 60~Hz electromagnetic ``mains hum'' and its subsequent integer harmonics into the detector hardware. The primary complication is the direct overlap of these power-line harmonics with the 30--300~Hz frequency band of the cosmic chirp. Extracting the underlying event necessitates a two-stage mathematical recovery process. Spectral deconvolution is first applied to invert the environmental convolution; this step typically requires a regularization parameter to prevent singularities and maintain numerical stability. Subsequently, highly targeted analog bandpass filtering must suppress the remaining low-frequency seismic interference and high-frequency electrical artifacts. This filtering stage requires an aggressive roll-off to eliminate the dominant 60~Hz harmonics, yet it must avoid introducing non-linear phase distortions that could alter the physical shape of the waveform.
 
-Meanwhile for aperiodic signals the Fourier Transform extends to analyzing the signal over a continuous spectrum of frequencies instead 
-of the discrete harmonics \cite{oppenheim1997}. Applying Fourier Transform to a system's impulse response gives its transfer function. The transfer function 
-dictates how the system filters different input frequencies \cite{riskin2003}. Moreover, the operational boundary of this filter is defined by 3dB cut-off 
-frequency that marks the exact point where the signal's power is reduced by half \cite{hsu2013}.
+\subsection{Contribution}
+This project simulates and evaluates front-end signal conditioning architectures utilized in advanced observatories. Specifically, the contributions of this study are as follows:
 
-Several specific MATLAB functions are required to computationally implement and visualize these mathematical operations. The syms and assume 
-functions establish the foundational symbolic variables and their specific mathematical constraints for calculus operations. The int() 
-function calculates the exact analytical integral to find the Fourier coefficients, while sum() and subs() are combined to evaluate and add 
-the truncated series terms. Finally, the fourier() command computes the continuous transfer function, and plotting tools like stem(), 
-plot(), and fplot() construct the visual representations of the signal magnitudes and cut-off relationships.
-
+\begin{itemize}
+    \item \textbf{Filter Design and Discretization:} Four distinct continuous-time analog bandpass filters (Butterworth, Chebyshev I, Chebyshev II, and Elliptic) were designed in the s-domain as 4th-order systems, bounded strictly between the astrophysical limits of 30~Hz and 300~Hz. These transfer functions were subsequently digitized for discrete simulation utilizing the bilinear transform.
+    \item \textbf{Domain Analysis:} The signal corruption and mathematical recovery processes were rigorously analyzed across both time and frequency domains. This analysis mapped the extent to which low-frequency seismic vibrations and 60~Hz electrical harmonics dominate the raw deconvolved spectrum.
+    \item \textbf{Comparative Evaluation:} The study demonstrated the comparative effects of different filter geometries on the accuracy of signal recovery. The findings establish that permitting mathematical ripples in the passband and stopband provides the critical roll-off steepness required to physically excise in-band power-line harmonics, indicating that the Elliptic filter significantly outperforms maximally flat filter models in isolating the original astrophysical event.
+\end{itemize}

@@ -14,7 +14,7 @@ To reconstruct the signal, the exponential Fourier coefficients ($C_n$) must be 
 C_n = \frac{1}{T} \int_{t_0}^{t_0+T} x(t) e^{-jn\omega_0 t} dt
 \end{equation}
 
-The experimental setup utilizes MATLAB’s Symbolic Math Toolbox to define the signal $x(t) = -2t$ and solve the integral for a harmonic range of $n$ from $-10$ to $10$. A critical component of this design involves handling numerical singularities; an infinitesimal constant ($eps$) is added to the frequency index when $n=0$ to prevent division-by-zero errors during numerical evaluation.
+The experimental setup utilizes MATLABs Symbolic Math Toolbox to define the signal $x(t) = -2t$ and solve the integral for a harmonic range of $n$ from $-10$ to $10$. A critical component of this design involves handling numerical singularities; an infinitesimal constant ($eps$) is added to the frequency index when $n=0$ to prevent division-by-zero errors during numerical evaluation.
 
 \subsection{System Response and Frequency Analysis}
 The second phase involves characterizing a system defined by its impulse response. The system is modeled by the function $h(t) = \frac{a}{2}e^{-a|t|}$ where $a \ge 0$. The experimental design uses the \texttt{fourier} function in MATLAB to determine the transfer function, $H(\omega)$, in the frequency domain.
