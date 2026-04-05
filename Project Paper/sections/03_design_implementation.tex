@@ -1,11 +1,11 @@
 \subsection{Signal Modeling}
 
-The architectural block diagram illustrated in Figure~\ref{fig:model} details the complete signal modeling and recovery pipeline utilized in this study. The forward modeling process initiates with the synthesis of the target astrophysical event, defined as a linear frequency-modulated (LFM) chirp spanning the 30--300~Hz band, denoted as the input $x(t)$. To replicate the physical interference actually observed at the detector, this ideal signal undergoes convolution with empirical LIGO strain data. This strain data serves as the system's impulse response, $h(t)$. The resulting operation yields the distorted output $y(t)$, representing the contaminated data stream that an interferometer would theoretically record.
+The architectural block diagram illustrated in Figure~\ref{fig:model} details the complete signal modeling and recovery utilized in this study. The forward modeling process initiates with the synthesis of the target astrophysical event, defined as a linear frequency-modulated (LFM) chirp spanning the 30--300~Hz band, denoted as the input $x(t)$. To replicate the physical interference actually observed at the detector, this ideal signal undergoes convolution with empirical LIGO strain data. This strain data serves as the system's impulse response, $h(t)$. The resulting operation yields the distorted output $y(t)$, representing the contaminated data stream that an interferometer would theoretically record.
 
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=\linewidth]{Model.png} 
-    \caption{Architectural block diagram detailing the complete signal modeling and recovery pipeline.}
+    \caption{Block diagram detailing the complete signal modeling and recovery.}
     \label{fig:model}
 \end{figure}
 
