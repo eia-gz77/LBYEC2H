@@ -1,51 +1,15 @@
-This section outlines the procedural framework used to decompose periodic signals and analyze system impulse responses using MATLAB's computational tools. The design is structured to ensure that the mathematical transition from the time domain to the frequency domain is accurate and replicable.
+\subsection{Signal Modeling}
 
-\subsection{Signal Modeling and Fourier Series Decomposition}
-The first phase of the experiment focuses on representing a periodic sawtooth signal, $x(t)$, through an Exponential Fourier Series. Based on the visual characteristics of the signal provided in the laboratory specifications, the period is identified as $T = 0.75$, which establishes the fundamental frequency as shown in Equation \ref{eq:w0}:
+The architectural block diagram illustrated in Figure~\ref{fig:model} details the complete signal modeling and recovery pipeline utilized in this study. The forward modeling process initiates with the synthesis of the target astrophysical event, defined as a linear frequency-modulated (LFM) chirp spanning the 30--300~Hz band, denoted as the input $x(t)$. To replicate the physical interference actually observed at the detector, this ideal signal undergoes convolution with empirical LIGO strain data. This strain data serves as the system's impulse response, $h(t)$. The resulting operation yields the distorted output $y(t)$, representing the contaminated data stream that an interferometer would theoretically record.
 
-\begin{equation}
-\omega_0 = \frac{2\pi}{T}
-\label{eq:w0}
-\end{equation}
+\begin{figure}[htbp]
+    \centering
+    % Ensure Model.png is saved in the same folder, or specify the path like 'figures/Model.png'
+    \includegraphics[width=\linewidth]{Model.png} 
+    \caption{Architectural block diagram detailing the complete signal modeling and recovery pipeline.}
+    \label{fig:model}
+\end{figure}
 
-To reconstruct the signal, the exponential Fourier coefficients ($C_n$) must be calculated. The methodology employs the following integral expression evaluated over one period:
+The subsequent phase of the pipeline attempts to mathematically invert this environmental degradation. Both the distorted output $y(t)$ and the known system impulse response $h(t)$ are converted into the frequency domain via a Fast Fourier Transform (FFT), producing $Y(f)$ and $H(f)$, respectively. Spectral deconvolution is then executed through a direct division operation: $Y(f) / (H(f) + \epsilon)$. The inclusion of the regularization parameter, $\epsilon$, appears strictly necessary in this framework. Without it, attempting division in spectral regions where the detector sensitivity approaches zero would likely cause asymptotic noise amplification, destabilizing the entire numerical array. Following this stabilized inversion, an Inverse Fast Fourier Transform (IFFT) returns the intermediate estimated signal, $\hat{X}(f)$, back to the time domain.
 
-\begin{equation}
-C_n = \frac{1}{T} \int_{t_0}^{t_0+T} x(t) e^{-jn\omega_0 t} dt
-\end{equation}
-
-The experimental setup utilizes MATLABs Symbolic Math Toolbox to define the signal $x(t) = -2t$ and solve the integral for a harmonic range of $n$ from $-10$ to $10$. A critical component of this design involves handling numerical singularities; an infinitesimal constant ($eps$) is added to the frequency index when $n=0$ to prevent division-by-zero errors during numerical evaluation.
-
-\subsection{System Response and Frequency Analysis}
-The second phase involves characterizing a system defined by its impulse response. The system is modeled by the function $h(t) = \frac{a}{2}e^{-a|t|}$ where $a \ge 0$. The experimental design uses the \texttt{fourier} function in MATLAB to determine the transfer function, $H(\omega)$, in the frequency domain.
-
-A key performance metric in this design is the 3dB cut-off frequency ($\omega_c$), defined as the point where the magnitude of the transfer function drops to $1/\sqrt{2}$ of its maximum value. The methodology requires solving the following magnitude equation to obtain a symbolic expression for $\omega_c$:
-
-\begin{equation}
-|H(\omega)| = \frac{1}{\sqrt{2}}
-\end{equation}
-
-\subsection{Step-by-Step Procedure}
-To ensure the replicability of the results, the following procedural steps are implemented:
-
-\begin{enumerate}
-    \item \textbf{Symbolic Initialization:} Define $t$, $n$, $\omega$, and $a$ as symbolic variables within the MATLAB workspace.
-    \item \textbf{Signal Construction:} Define the periodic signal $x(t)$ and extend it to three full periods using \texttt{piecewise} or \texttt{heaviside} functions to observe signal behavior across the interval $-1 \le t \le 1$.
-    \item \textbf{Coefficient Calculation:} Utilize the \texttt{int} function to compute the symbolic expression for the Fourier coefficients $C_n$.
-    \item \textbf{Numerical Reconstruction:} Convert symbolic coefficients to numerical values and reconstruct the signal $x_{pN}(t)$ by summing the harmonics from $n = -10$ to $10$.
-    \item \textbf{Signal Comparison:} Plot the original signal against the truncated Fourier series using a time increment of $\Delta t = 1/1000$ to visualize the approximation and the effects of the Gibbs phenomenon.
-    \item \textbf{System Characterization:} Define the impulse response $h(t)$, compute the Fourier Transform $H(\omega)$, and solve for the cut-off frequency $\omega_c$.
-    \item \textbf{Parametric Sweep:} Generate magnitude response plots for $|H(\omega)|$ across varying system parameters $a = [10, 50, 80, 100]$ to observe bandwidth variations.
-\end{enumerate}
-
-\subsection{Computational Logic}
-The programmatic flow of the experiment is summarized in the following logic:
-
-\begin{itemize}
-    \item Initialize symbolic environment and define fundamental signal parameters ($T$, $\omega_0$).
-    \item Evaluate the integral for $C_n$ and store coefficients in a vector array.
-    \item Loop through the harmonic indices to compute the partial sum of the Fourier series.
-    \item Apply the Fourier Transform to the system impulse response and solve for $\omega_c$ using the \texttt{solve} command.
-    \item Visualize the magnitude of $C_n$, the reconstructed time-domain signal, and the frequency-domain magnitude responses.
-\end{itemize}
-
+While spectral division retrieves the primary geometry of the chirp, it inevitably introduces high-frequency computational artifacts alongside residual 60~Hz harmonics. Relying solely on discrete deconvolution may prove insufficient for precise waveform reconstruction, suggesting that further physical conditioning is required. Therefore, the final stage routes the intermediate recovered signal into four parallel continuous-time filter networks. The signal is convolved independently with Butterworth, Chebyshev I, Chebyshev II, and Elliptic transfer functions, denoted as $H(s)$. Each operation yields a distinct output (Result 1 through 4), facilitating a direct comparative analysis of how varying magnitude responses and phase characteristics affect the final attenuation of out-of-band interference.
