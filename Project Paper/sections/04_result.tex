@@ -1,38 +1,156 @@
-The results obtained from this exercise provide a comprehensive understanding of frequency-domain representations and system filtering behavior. To ensure computational reliability and mathematical validity of the exercise, independent simulations are consolidated and verified.
+\subsection{Signal Baseline and System Spectral Masking}
+The experimental procedure established a controlled known signal using a linear frequency-modulated (LFM) chirp, $x(t)$, which serves as the ideal astrophysical reference. Figure \ref{fig:input_signal} illustrates this input signal in the time domain, appearing as a waveform where the cycles are initially spaced far apart and gradually become more compressed over a 2-second window. This visual compression represents the dynamic frequency sweep from 30 Hz to 300 Hz.
 
-\subsection{Fourier Series Decomposition and Magnitude Spectrum}
-A periodic signal can be broken down into individual frequency components having the magnitude spectrum showing how the signal's energy is distributed across the mentioned frequencies. The frequency-domain representation of the given periodic sawtooth signal $x_p(t) = -2t$ with a period of $T=0.75$ quantifies energy distribution. Through calculating the exponential Fourier series coefficients ($C_n$) the analytical composition of the signal is found. The resulting magnitude spectrum which was plotted for the harmonic index $-10 \le n \le 10$ reveals a symmetric decay centered around the fundamental DC component. This peak shows that the lowest frequencies hold the majority of the waveform's power while the higher harmonics have less. Just to maintain computational stability throughout numerical evaluation of this an infinitesimal variable (\texttt{eps}) was required to prevent division-by-zero singularities at the exact zero-frequency index ($n=0$).
-
-\begin{figure}[htbp]
+\begin{figure}[!h]
     \centering
     \includegraphics[width=\columnwidth]{figure1.png}
-    \caption{Magnitude spectrum of the exponential Fourier series coefficients for $-10 \le n \le 10$, illustrating peak energy concentration at the fundamental frequency.}
+    \caption{Input Signal $x(t)$ (Known Chirp) in the Time-Domain.}
+    \label{fig:input_signal}
 \end{figure}
 
-\subsection{Signal Reconstruction and the Gibbs Phenomenon}
-Reconstructing a signal that contains amplitude changes using a limited number of frequencies results in a behavior known as the Gibbs phenomenon. Generating the analytical expression for the truncated signal $x_{pN}(t)$ by utilizing the computed finite series of 21 harmonics produces algebraic complexity and the time-domain also needs numerical substitution over time vector $\Delta t=0.001$. Overlaying this reconstructed sequence against the ideal original signal $x_p(t)$ shows the mathematical limitations of finite harmonic summation while the approximation accurately follows the linear downward slope of the sawtooth wave. This exhibits significant structural deviations at the interval boundaries.
+Figure \ref{fig:original_spectrum} presents the Magnitude Spectrum of the Original Signal $x(t)$, showing how the energy is distributed across the frequency range before any system interference. The plot reveals a clear energy block concentrated between 30 and 300 Hz strictly. The wiggles seen at the top of this spectral block are Fresnel ripples, which are the expected mathematical result of a chirp signal that has a finite duration.
 
-\begin{figure}[htbp]
+\begin{figure}[!h]
     \centering
     \includegraphics[width=\columnwidth]{figure2.png}
-    \caption{Time-domain comparison of the original sawtooth signal and its truncated Fourier reconstruction, highlighting oscillatory ringing at waveform discontinuities.}
+    \caption{Magnitude Spectrum of the Original Signal $x(t)$.}
+    \label{fig:original_spectrum}
 \end{figure}
 
-\subsection{Transfer Function and Cut-off Linearity}
-A system's transfer function dictates its frequency filtering behavior and the 3dB cut-off frequency in the exercise defines the exact boundary where the transmitted signal loses half of its power. For aperiodic continuous-time systems the exponential impulse response $h(t) = \frac{a}{2}e^{-a|t|}$ represents an ideal low-pass filter. Deriving the transfer function $H(\omega)$ using continuous Fourier transform establishes the baseline frequency-domain behavior. Analytically solving for the 3dB cut-off frequency yields multiple algebraic roots due to the quadratic nature of the frequency variable and getting the magnitude establishes the exact mathematical relationship $\omega_c = a\sqrt{\sqrt{2}-1}$. Evaluating and plotting that magnitude expression through $0 \le a \le 100$ generates a strictly positive linear plot. This graphical result mathematically proves a direct proportional dependency with a scaling constant of approximately 0.6436 where the operational frequency boundary of the filter is defined by its exponential scaling factor $a$.
+The system's impulse response, $h(t)$, was derived from the LIGO Open Science Center (LOSC) dataset using the GW150914 recording. Figure \ref{fig:impulse_response} displays the 16-17 second window of this strain data, which captures the peak energy of the black hole collision. The plot appears as a complex, non-stationary wave of noise that represents the mechanical and environmental fingerprint of the detector at the moment of the merger.
 
-\begin{figure}[htbp]
+\begin{figure}[!h]
     \centering
     \includegraphics[width=\columnwidth]{figure3.png}
-    \caption{Linear proportional relationship between the exponential system parameter $a$ and the resulting positive 3dB cut-off frequency magnitude $\omega_c$.}
+    \caption{16-17s Merger Window of the GW150914 Impulse Response $h(t)$ in the Time-Domain.}
+    \label{fig:impulse_response}
 \end{figure}
 
-\subsection{Parametric Bandwidth Expansion}
-Increasing a low-pass filter's cut-off frequency naturally widens its passband that allowing a broader range of frequencies to pass through the system unattenuated. The practical implications of the previously established linear relationship are validated by evaluating the magnitude response curves $|H(\omega)|$ at discrete parametric intervals of $a=10$, $50$, $80$, and $100$. As the defining parameter $a$ scales upward the attenuation slopes relaxes causing the bell-shaped passband to widen uniformly outward across the frequency axis. Consequently, higher cut-off frequencies natively expand the system's absolute bandwidth permitting a broader continuous spectrum of input frequencies to propagate through the system unattenuated \cite{haykin1999}.
+\subsection{Convolutional Masking and Spectral Interference}
+To simulate physical signal masking, $x(t)$ was convolved with $h(t)$, resulting in the distorted output $y(t)$ as defined in Eq. \ref{eq:convolution}:
+\begin{equation}
+    y(t) = x(t) * h(t)
+    \label{eq:convolution}
+\end{equation}
+As shown in Figure \ref{fig:distorted_output}, the time-domain waveform of the chirp is no longer visible; it is entirely buried under the high-amplitude oscillations of the detector noise. This proves that the signal is physically integrated into the noise, making it impossible to see the black hole event through simple visual inspection.
 
-\begin{figure}[htbp]
+\begin{figure}[!h]
     \centering
-    \includegraphics[width=0.6\columnwidth]{figure4.png}
-    \caption{Superimposed magnitude responses demonstrating continuous bandwidth expansion as the exponential parameter $a$ increases from 10 to 100.}
+    \includegraphics[width=\columnwidth]{figure4.png}
+    \caption{Distorted Output Signal $y(t)=x(t)*h(t)$ in the Time-Domain.}
+    \label{fig:distorted_output}
 \end{figure}
+
+The Distorted $y(t)$ Spectrum in Figure \ref{fig:distorted_spectrum} provides a frequency-domain view of this corruption. We expect to see the 30-300 Hz chirp energy, but the result is a spectrum dominated by massive spikes below 60 Hz. These spikes represent the seismic rumble of the earth and the 60 Hz electromagnetic mains hum from the electrical grid, which effectively drown out the cosmic signal.
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=\columnwidth]{figure5.png}
+    \caption{Magnitude Spectrum of the Distorted Signal $y(t)$.}
+    \label{fig:distorted_spectrum}
+\end{figure}
+
+Figure \ref{fig:distorted_spectrogram} illustrates the Distorted Signal Spectrogram, mapping energy over both time and frequency. The heat map shows horizontal lines representing the power-line hum that persists throughout the event. While a faint diagonal swoosh can be detected, it is heavily contaminated by background haze.
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=\columnwidth]{figure6.png}
+    \caption{Distorted Signal $y(t)$ Spectrogram Frequency Sweep.}
+    \label{fig:distorted_spectrogram}
+\end{figure}
+
+\subsection{Structural Extraction via Frequency-Domain Deconvolution}
+The first stage of recovery used frequency-domain deconvolution to mathematically reverse the environmental smearing. This inversion is expressed in Eq. \ref{eq:deconvolution}:
+\begin{equation}
+    \hat{X}(f) = \frac{Y(f)}{H(f)}
+    \label{eq:deconvolution}
+\end{equation}
+Figure \ref{fig:raw_decon_time} shows the raw output of this process in the time domain. While the chirp's shape returns, the waveform appears thick and fuzzy due to high-frequency artifacts created by the division of small numbers during the inversion process. To maintain numerical stability, a regularization parameter $\epsilon = 10^{-6}$ was incorporated into the denominator.
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=\columnwidth]{figure7.png}
+    \caption{Raw Deconvolution Waveform (Pre-Filter Recovery).}
+    \label{fig:raw_decon_time}
+\end{figure}
+
+Figure \ref{fig:raw_decon_spectrum} displays the Raw Deconvolution Spectrum, verifying that the energy between 30 and 300 Hz has been successfully restored. However, unlike the clean synthetic signal spectrum, this plot shows significant noise tails outside the target band. The Raw Deconvolution Spectrogram in Figure \ref{fig:raw_decon_spectrogram} provides visual evidence of restoration via a distinct red diagonal line, though surrounded by yellow-green haze.
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=\columnwidth]{figure8.png}
+    \caption{Magnitude Spectrum of the Raw Deconvolution Output.}
+    \label{fig:raw_decon_spectrum}
+\end{figure}
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=\columnwidth]{figure9.png}
+    \caption{Spectrogram of the Raw Deconvolution Output.}
+    \label{fig:raw_decon_spectrogram}
+\end{figure}
+
+\subsection{Comparative Time-Domain Reconstruction}
+The individual time-domain performances of the four analog-informed bandpass filters are presented in Figure \ref{fig:comp_time}. The Butterworth filter achieved a stable, continuous waveform, successfully preserving the LFM characteristics. Similarly, the Chebyshev I filter produced a clear reconstruction, utilizing passband ripples to achieve a sharper roll-off. In contrast, the Chebyshev II filter represents a catastrophic failure; oscillations decay and disappear entirely after the 0.8-second mark. The Elliptic filter yielded the most defined reconstruction, demonstrating the highest structural fidelity.
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=\columnwidth]{figure10.png}
+    \caption{Comparative Time-Domain Waveforms for all Four Filter Topologies.}
+    \label{fig:comp_time}
+\end{figure}
+
+The visual verification of frequency-over-time consistency is provided in Figure \ref{fig:spectrogram_grid}. The Elliptic spectrogram represents the most successful recovery, showing the highest intensity in the red sweep and the darkest blue background, which indicates the highest signal-to-noise ratio.
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=\columnwidth]{figure11.png}
+    \caption{Spectrogram for Butterworth, Chebyshev I, Chebyshev II, and Elliptic Filters.}
+    \label{fig:spectrogram_grid}
+\end{figure}
+
+\subsection{Modeling of Filter Frequency and Phase Responses}
+Figure \ref{fig:freq_sweep} details the magnitude spectra of the filtered signals. The Elliptic spectrum demonstrates a brick-wall effect with the sharpest vertical transition at the boundaries, distributing ripples across both bands to maximize noise rejection.
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=\columnwidth]{figure12.png}
+    \caption{Frequency Sweep for Butterworth, Chebyshev I, Chebyshev II, and Elliptic Filters.}
+    \label{fig:freq_sweep}
+\end{figure}
+
+The Bode plots in Figure \ref{fig:bode_plots} characterize the internal mathematical behaviors. Critically, the phase response highlights the primary failure of the Chebyshev II filter, which displays sharp, vertical phase discontinuities at the 30 Hz and 300 Hz limits. This indicates extreme phase distortion that scrambled the temporal alignment of the signal components.
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=\columnwidth]{figure13.png}
+    \caption{Bode Plot for Butterworth, Chebyshev I, Chebyshev II, and Elliptic Filters.}
+    \label{fig:bode_plots}
+\end{figure}
+
+\subsection{Quantitative Performance and Statistical Analysis}
+The final quantitative assessment is provided in Figure \ref{fig:bar_chart} and summarized in Table \ref{tab:metrics}. The Elliptic filter dominates all categories, achieving the highest PSNR (5.8647 dB) and Correlation ($\rho=0.7275$).
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=\columnwidth]{figure14.png}
+    \caption{Bar Chart Performance Comparison for Butterworth, Chebyshev I, Chebyshev II, and Elliptic Filters.}
+    \label{fig:bar_chart}
+\end{figure}
+
+These numerical results, summarized in Table \ref{tab:metrics}, prove that the Elliptic topology achieved the lowest mathematical error, with an RMSE of 0.5091.
+
+\begin{table}[!h]
+\centering
+\caption{Performance Evaluation Metrics}
+\label{tab:metrics}
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+\textbf{Filter} & \textbf{MSE} & \textbf{RMSE} & \textbf{PSNR (dB)} & \textbf{Corr ($\rho$)} \\ \hline
+Butterworth & 0.3141 & 0.5605 & 5.0292 & 0.6645 \\ \hline
+Chebyshev I & 0.2622 & 0.5121 & 5.8135 & 0.7243 \\ \hline
+Chebyshev II & 0.5502 & 0.7418 & 2.5948 & 0.0689 \\ \hline
+\textbf{Elliptic} & \textbf{0.2591} & \textbf{0.5091} & \textbf{5.8647} & \textbf{0.7275} \\ \hline
+\end{tabular}
+\end{table}
 
