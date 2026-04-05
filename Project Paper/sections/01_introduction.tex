@@ -1,0 +1,20 @@
+The primary objective of this laboratory exercise is to mathematically analyze and computationally simulate continuous-time signals using 
+Fourier Series and Fourier Transforms. Analyzing signals in the frequency domain shows the individual sinusoidal frequency components that 
+make up complex waveforms \cite{oppenheim1997}. 
+
+The exponential Fourier Series specifically decomposes continuous-time periodic signals into an infinite sum of complex exponential 
+functions \cite{riskin2003}.
+Reconstructing a signal using only a finite number of exponential terms results in waveform that exhibits oscillations 
+near discontinuities which is a behavior known as the Gibbs phenomenon \cite{haykin1999}.
+
+Meanwhile for aperiodic signals the Fourier Transform extends to analyzing the signal over a continuous spectrum of frequencies instead 
+of the discrete harmonics \cite{oppenheim1997}. Applying Fourier Transform to a system's impulse response gives its transfer function. The transfer function 
+dictates how the system filters different input frequencies \cite{riskin2003}. Moreover, the operational boundary of this filter is defined by 3dB cut-off 
+frequency that marks the exact point where the signal's power is reduced by half \cite{hsu2013}.
+
+Several specific MATLAB functions are required to computationally implement and visualize these mathematical operations. The syms and assume 
+functions establish the foundational symbolic variables and their specific mathematical constraints for calculus operations. The int() 
+function calculates the exact analytical integral to find the Fourier coefficients, while sum() and subs() are combined to evaluate and add 
+the truncated series terms. Finally, the fourier() command computes the continuous transfer function, and plotting tools like stem(), 
+plot(), and fplot() construct the visual representations of the signal magnitudes and cut-off relationships.
+
