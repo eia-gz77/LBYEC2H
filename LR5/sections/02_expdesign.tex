@@ -1,51 +1,60 @@
-This section outlines the procedural framework used to decompose periodic signals and analyze system impulse responses using MATLAB's computational tools. The design is structured to ensure that the mathematical transition from the time domain to the frequency domain is accurate and replicable.
+The primary objective of this experiment is to design, simulate, and compare four major types of analog filter approximations: Butterworth, Chebyshev Type 1, Chebyshev Type 2, and Elliptic filters. The goal is to determine how well each mathematical model adheres to a specific set of bandpass constraints and how they deviate from an ideal filter response. This methodology utilizes a computational approach to determine the minimum required filter order, synthesize the transfer functions in the $s$-domain, and transform those functions into the frequency domain for visual analysis of magnitude and phase.
 
-\subsection{Signal Modeling and Fourier Series Decomposition}
-The first phase of the experiment focuses on representing a periodic sawtooth signal, $x(t)$, through an Exponential Fourier Series. Based on the visual characteristics of the signal provided in the laboratory specifications, the period is identified as $T = 0.75$, which establishes the fundamental frequency as shown in Equation \ref{eq:w0}:
+\subsection*{2.1 Technical Specifications and Constraints}
 
-\begin{equation}
-\omega_0 = \frac{2\pi}{T}
-\label{eq:w0}
-\end{equation}
+The design process is governed by a set of rigid parameters that define the behavior of the bandpass filter. The passband, which is the range of frequencies allowed to pass through the filter, is set between a lower edge of $2000$ rad/sec and an upper edge of $4000$ rad/sec. Within this region, a maximum ripple of $1$ dB is permitted. The stopbands, where the signal must be significantly blocked, are defined as frequencies below $1500$ rad/sec and above $4500$ rad/sec. In these regions, the filter must provide at least $60$ dB of attenuation. These requirements serve as the foundation for calculating the mathematical complexity of each filter.
 
-To reconstruct the signal, the exponential Fourier coefficients ($C_n$) must be calculated. The methodology employs the following integral expression evaluated over one period:
+\begin{center}
+\small
+\begin{tabular}{|l|c|}
+\hline
+\textbf{Design Parameter} & \textbf{Symbol} & \textbf{Target Value} \\ \hline
+Lower Passband Frequency & $W_{p1}$ & $2000$ rad/sec \\ \hline
+Upper Passband Frequency & $W_{p2}$ & $4000$ rad/sec \\ \hline
+Lower Stopband Frequency & $W_{s1}$ & $1500$ rad/sec \\ \hline
+Upper Stopband Frequency & $W_{s2}$ & $4500$ rad/sec \\ \hline
+Maximum Passband Loss & $R_p$ & $1$ dB \\ \hline
+Minimum Stopband Attenuation & $R_s$ & $60$ dB \\ \hline
+\end{tabular}
+\caption{Required Filter Performance Specifications}
+\end{center}
 
-\begin{equation}
-C_n = \frac{1}{T} \int_{t_0}^{t_0+T} x(t) e^{-jn\omega_0 t} dt
-\end{equation}
+\subsection*{2.2 Mathematical Modeling and Order Calculation}
 
-The experimental setup utilizes MATLAB’s Symbolic Math Toolbox to define the signal $x(t) = -2t$ and solve the integral for a harmonic range of $n$ from $-10$ to $10$. A critical component of this design involves handling numerical singularities; an infinitesimal constant ($eps$) is added to the frequency index when $n=0$ to prevent division-by-zero errors during numerical evaluation.
+In analog filter design, the system is represented by a transfer function $H(s)$ in the Laplace domain, which is a ratio of two polynomials. The complexity of the filter is defined by its "order" ($N$); a higher order results in a steeper transition between the passband and stopband but increases the mathematical and physical complexity of the system. 
 
-\subsection{System Response and Frequency Analysis}
-The second phase involves characterizing a system defined by its impulse response. The system is modeled by the function $h(t) = \frac{a}{2}e^{-a|t|}$ where $a \ge 0$. The experimental design uses the \texttt{fourier} function in MATLAB to determine the transfer function, $H(\omega)$, in the frequency domain.
+The first step in the procedure involves using specialized algorithms, such as \texttt{buttord} and \texttt{ellipord}, to calculate the lowest integer order $N$ that satisfies the $1$ dB ripple and $60$ dB attenuation requirements. These functions analyze the "steepness" required to drop from the passband to the stopband. Once $N$ is found, the specific coefficients for the numerator and denominator of the transfer function are generated using standard approximation formulas for each filter type.
 
-A key performance metric in this design is the 3dB cut-off frequency ($\omega_c$), defined as the point where the magnitude of the transfer function drops to $1/\sqrt{2}$ of its maximum value. The methodology requires solving the following magnitude equation to obtain a symbolic expression for $\omega_c$:
+\subsection*{2.3 Frequency Response Transformation}
 
-\begin{equation}
-|H(\omega)| = \frac{1}{\sqrt{2}}
-\end{equation}
+To evaluate how these filters perform across a real-world spectrum, the $s$-domain transfer function must be evaluated as a function of angular frequency ($j\omega$). The experiment defines a sample range from $500$ to $6000$ rad/sec. By applying the \texttt{freqs} function, the theoretical Laplace expression is converted into a complex frequency response. From this result, the magnitude is derived by taking the absolute value, allowing us to see how much of the signal is kept or blocked. The phase is derived by calculating the angle of the response in radians, which illustrates how the filter shifts the timing of the input signal. 
 
-\subsection{Step-by-Step Procedure}
-To ensure the replicability of the results, the following procedural steps are implemented:
+Finally, an ideal filter is mathematically constructed to serve as a benchmark. This ideal model is defined to have a magnitude of exactly $1$ within the $2000$--$4000$ rad/sec range and $0$ everywhere else, with a perfectly flat phase. Comparing the four analog designs to this ideal model reveals the inherent trade-offs of each approximation, such as the Butterworth’s smoothness versus the Elliptic’s rapid roll-off.
 
-\begin{enumerate}
-    \item \textbf{Symbolic Initialization:} Define $t$, $n$, $\omega$, and $a$ as symbolic variables within the MATLAB workspace.
-    \item \textbf{Signal Construction:} Define the periodic signal $x(t)$ and extend it to three full periods using \texttt{piecewise} or \texttt{heaviside} functions to observe signal behavior across the interval $-1 \le t \le 1$.
-    \item \textbf{Coefficient Calculation:} Utilize the \texttt{int} function to compute the symbolic expression for the Fourier coefficients $C_n$.
-    \item \textbf{Numerical Reconstruction:} Convert symbolic coefficients to numerical values and reconstruct the signal $x_{pN}(t)$ by summing the harmonics from $n = -10$ to $10$.
-    \item \textbf{Signal Comparison:} Plot the original signal against the truncated Fourier series using a time increment of $\Delta t = 1/1000$ to visualize the approximation and the effects of the Gibbs phenomenon.
-    \item \textbf{System Characterization:} Define the impulse response $h(t)$, compute the Fourier Transform $H(\omega)$, and solve for the cut-off frequency $\omega_c$.
-    \item \textbf{Parametric Sweep:} Generate magnitude response plots for $|H(\omega)|$ across varying system parameters $a = [10, 50, 80, 100]$ to observe bandwidth variations.
-\end{enumerate}
+\subsection*{2.4 Procedural Logic (Pseudocode)}
 
-\subsection{Computational Logic}
-The programmatic flow of the experiment is summarized in the following logic:
+The following logic outlines the step-by-step execution used to produce the experimental data and corresponding visualizations:
 
-\begin{itemize}
-    \item Initialize symbolic environment and define fundamental signal parameters ($T$, $\omega_0$).
-    \item Evaluate the integral for $C_n$ and store coefficients in a vector array.
-    \item Loop through the harmonic indices to compute the partial sum of the Fourier series.
-    \item Apply the Fourier Transform to the system impulse response and solve for $\omega_c$ using the \texttt{solve} command.
-    \item Visualize the magnitude of $C_n$, the reconstructed time-domain signal, and the frequency-domain magnitude responses.
-\end{itemize}
-
+\begin{verbatim}
+1.  START
+2.  INITIALIZE design constants:
+        Wp = [2000, 4000], Ws = [1500, 4500]
+        Rp = 1, Rs = 60
+        Frequency_Range (w) = 500 to 6000 step 10
+3.  FOR EACH Approximation (Butterworth, Cheby1, Cheby2, Elliptic):
+        a. Determine Order (N) and Cutoff (Wn) using 'ord' tools
+        b. Generate transfer function coefficients (b, a)
+        c. Transform (b, a) to frequency response (h) using 'freqs'
+        d. Magnitude_Data = abs(h)
+        e. Phase_Data = angle(h)
+        f. Add Magnitude_Data to Figure 1
+        g. Add Phase_Data to Figure 2
+    END FOR
+4.  CREATE Ideal Filter:
+        IF (w >= 2000 AND w <= 4000) THEN Magnitude = 1
+        ELSE Magnitude = 0
+        Phase = 0 for all w
+5.  OVERLAY Ideal Filter data on Figures 1 and 2
+6.  LABEL axes and APPLY legends
+7.  END
+\end{verbatim}
