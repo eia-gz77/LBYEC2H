@@ -4,9 +4,10 @@ The primary objective of this experiment is to design, simulate, and compare fou
 
 The design process is governed by a set of rigid parameters that define the behavior of the bandpass filter. The passband, which is the range of frequencies allowed to pass through the filter, is set between a lower edge of $2000$ rad/sec and an upper edge of $4000$ rad/sec. Within this region, a maximum ripple of $1$ dB is permitted. The stopbands, where the signal must be significantly blocked, are defined as frequencies below $1500$ rad/sec and above $4500$ rad/sec. In these regions, the filter must provide at least $60$ dB of attenuation. These requirements serve as the foundation for calculating the mathematical complexity of each filter.
 
-\begin{center}
+\begin{table}[h]
+\centering
 \small
-\begin{tabular}{|l|c|}
+\begin{tabular}{|l|c|c|} % Added a third column 'c' here
 \hline
 \textbf{Design Parameter} & \textbf{Symbol} & \textbf{Target Value} \\ \hline
 Lower Passband Frequency & $W_{p1}$ & $2000$ rad/sec \\ \hline
@@ -17,7 +18,8 @@ Maximum Passband Loss & $R_p$ & $1$ dB \\ \hline
 Minimum Stopband Attenuation & $R_s$ & $60$ dB \\ \hline
 \end{tabular}
 \caption{Required Filter Performance Specifications}
-\end{center}
+\label{tab:filter_specs}
+\end{table}
 
 \subsection*{2.2 Mathematical Modeling and Order Calculation}
 
