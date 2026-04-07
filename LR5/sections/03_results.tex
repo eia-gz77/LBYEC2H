@@ -1,38 +1,17 @@
-The results obtained from this exercise provide a comprehensive understanding of frequency-domain representations and system filtering behavior. To ensure computational reliability and mathematical validity of the exercise, independent simulations are consolidated and verified.
+The design and performance of the Butterworth, Chebyshev Type I, Chebyshev Type II, and Elliptic analog bandpass filters were evaluated based on the given laboratory specifications. The system required passband edges at $2000$ and $4000$ rad/sec with a maximum ripple of $1$ dB ($R_p$), and stopband edges at $1500$ and $4500$ rad/sec with a minimum attenuation of $60$ dB ($R_s$). An ideal bandpass filter was also modeled using symbolic expressions to act as a reference for comparison.
 
-\subsection{Fourier Series Decomposition and Magnitude Spectrum}
-A periodic signal can be broken down into individual frequency components having the magnitude spectrum showing how the signal's energy is distributed across the mentioned frequencies. The frequency-domain representation of the given periodic sawtooth signal $x_p(t) = -2t$ with a period of $T=0.75$ quantifies energy distribution. Through calculating the exponential Fourier series coefficients ($C_n$) the analytical composition of the signal is found. The resulting magnitude spectrum which was plotted for the harmonic index $-10 \le n \le 10$ reveals a symmetric decay centered around the fundamental DC component. This peak shows that the lowest frequencies hold the majority of the waveform's power while the higher harmonics have less. Just to maintain computational stability throughout numerical evaluation of this an infinitesimal variable (\texttt{eps}) was required to prevent division-by-zero singularities at the exact zero-frequency index ($n=0$).
+As shown in Figure 1, the magnitude response highlights the differences in efficiency and ripple behavior among the filter types. The Butterworth filter exhibits a maximally flat passband, but it generally requires a higher order to meet the $60$ dB stopband requirement. In contrast, the Chebyshev Type I filter introduces passband ripples to achieve a steeper roll-off, while the Chebyshev Type II filter maintains a flat passband at the expense of ripples in the stopband. Among all the designs, the Elliptic filter provides the sharpest transition between the passband and stopband by allowing ripples in both regions, making it the most order-efficient option.
 
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=\columnwidth]{figure1.png}
-    \caption{Magnitude spectrum of the exponential Fourier series coefficients for $-10 \le n \le 10$, illustrating peak energy concentration at the fundamental frequency.}
 \end{figure}
 
 \subsection{Signal Reconstruction and the Gibbs Phenomenon}
-Reconstructing a signal that contains amplitude changes using a limited number of frequencies results in a behavior known as the Gibbs phenomenon. Generating the analytical expression for the truncated signal $x_{pN}(t)$ by utilizing the computed finite series of 21 harmonics produces algebraic complexity and the time-domain also needs numerical substitution over time vector $\Delta t=0.001$. Overlaying this reconstructed sequence against the ideal original signal $x_p(t)$ shows the mathematical limitations of finite harmonic summation while the approximation accurately follows the linear downward slope of the sawtooth wave. This exhibits significant structural deviations at the interval boundaries.
+
+The phase response, shown in Figure 2, illustrates the frequency-dependent phase shifts present in practical filter designs. While the ideal filter maintains a constant zero phase, all realizable analog filters exhibit some level of non-linearity. Among the filters, the Butterworth design generally provides the most linear phase response within the passband, which is important for preserving signal timing. However, as the filters become more aggressive in terms of magnitude roll-off—particularly in the Chebyshev and Elliptic designs—the phase distortion becomes more pronounced, especially near the cutoff frequencies of $2000$ and $4000$ rad/sec.
 
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=\columnwidth]{figure2.png}
-    \caption{Time-domain comparison of the original sawtooth signal and its truncated Fourier reconstruction, highlighting oscillatory ringing at waveform discontinuities.}
 \end{figure}
-
-\subsection{Transfer Function and Cut-off Linearity}
-A system's transfer function dictates its frequency filtering behavior and the 3dB cut-off frequency in the exercise defines the exact boundary where the transmitted signal loses half of its power. For aperiodic continuous-time systems the exponential impulse response $h(t) = \frac{a}{2}e^{-a|t|}$ represents an ideal low-pass filter. Deriving the transfer function $H(\omega)$ using continuous Fourier transform establishes the baseline frequency-domain behavior. Analytically solving for the 3dB cut-off frequency yields multiple algebraic roots due to the quadratic nature of the frequency variable and getting the magnitude establishes the exact mathematical relationship $\omega_c = a\sqrt{\sqrt{2}-1}$. Evaluating and plotting that magnitude expression through $0 \le a \le 100$ generates a strictly positive linear plot. This graphical result mathematically proves a direct proportional dependency with a scaling constant of approximately 0.6436 where the operational frequency boundary of the filter is defined by its exponential scaling factor $a$.
-
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=\columnwidth]{figure3.png}
-    \caption{Linear proportional relationship between the exponential system parameter $a$ and the resulting positive 3dB cut-off frequency magnitude $\omega_c$.}
-\end{figure}
-
-\subsection{Parametric Bandwidth Expansion}
-Increasing a low-pass filter's cut-off frequency naturally widens its passband that allowing a broader range of frequencies to pass through the system unattenuated. The practical implications of the previously established linear relationship are validated by evaluating the magnitude response curves $|H(\omega)|$ at discrete parametric intervals of $a=10$, $50$, $80$, and $100$. As the defining parameter $a$ scales upward the attenuation slopes relaxes causing the bell-shaped passband to widen uniformly outward across the frequency axis. Consequently, higher cut-off frequencies natively expand the system's absolute bandwidth permitting a broader continuous spectrum of input frequencies to propagate through the system unattenuated \cite{haykin1999}.
-
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=0.6\columnwidth]{figure4.png}
-    \caption{Superimposed magnitude responses demonstrating continuous bandwidth expansion as the exponential parameter $a$ increases from 10 to 100.}
-\end{figure}
-
